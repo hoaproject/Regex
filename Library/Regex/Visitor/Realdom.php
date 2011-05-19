@@ -247,15 +247,7 @@ class Realdom implements \Hoa\Visitor\Visit {
             $upper = 7;
 
         $child = $this->_element->getChild(0);
-
-        // Optimisation.
-        if('#range' != $child->getId())
-            return str_repeat(
-                $child->accept($this, $this->_handle, $this->_eldnah),
-                $this->_sampler->getInteger($lower, $upper)
-            );
-
-        $out = null;
+        $out   = null;
 
         for($i = 0, $m = $this->_sampler->getInteger($lower, $upper);
             $i < $m;
