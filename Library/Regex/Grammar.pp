@@ -60,8 +60,10 @@ quantifier:
   | <n_or_more>
 
 #class:
-    ( ::negative_class_:: #negativeclass <literal>+ )
-  | ( ::class_:: ( range() | <literal> )+ )
+    (
+        ( ::negative_class_:: #negativeclass <literal>+ )
+      | ( ::class_:: ( range() | <literal> )+ )
+    )
     ::_class::
 
 #range:
