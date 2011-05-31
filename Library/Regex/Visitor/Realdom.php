@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Compiler\Visitor\Exception
+ * \Hoa\Regex\Visitor\Exception
  */
--> import('Compiler.Visitor.Exception')
+-> import('Regex.Visitor.Exception')
 
 /**
  * \Hoa\Visitor\Visit
