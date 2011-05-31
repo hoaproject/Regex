@@ -11,6 +11,12 @@
 %token _class                 \]
 %token  range                 -
 
+// Lookahead and lookbehind assertions.
+%token  lookahead_            \(\?=
+%token  negative_lookahead_   \(\?!
+%token  lookbehind_           \(\?<=
+%token  negative_lookbehind_  \(\?<!
+
 // Named capturing group (Perl): (?<name>…).
 %token  named_capturing_      \(\?<   -> nc
 %token  nc:capturing_name     [^>]+
@@ -18,12 +24,6 @@
 
 // Non-capturing group.
 %token  non_capturing_        \(\?:
-
-// Lookahead and lookbehind assertions.
-%token  lookahead_            \(\?=
-%token  negative_lookahead_   \(\?!
-%token  lookbehind_           \(\?<=
-%token  negative_lookbehind_  \(\?<!
 
 // Capturing group: (…).
 %token  capturing_            \(
