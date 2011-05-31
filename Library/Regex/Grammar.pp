@@ -82,7 +82,7 @@ quantifier:
     ::_class::
 
 #range:
-    <literal> <range> <literal>
+    <literal> ::range:: <literal>
 
 simple:
     capturing()

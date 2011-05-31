@@ -286,7 +286,7 @@ class Realdom implements \Hoa\Visitor\Visit {
 
         return chr($this->_sampler->getInteger(
             ord($this->_element->getChild(0)->getValueValue()),
-            ord($this->_element->getChild(2)->getValueValue())
+            ord($this->_element->getChild(1)->getValueValue())
         ));
     }
 }
