@@ -12,7 +12,9 @@
 %token  range                 -
 
 // Named capturing group (Perl): (?<name>…).
-%token  named_capturing_      \(\?<[^>]+>
+%token  named_capturing_      \(\?<   -> nc
+%token  nc:capturing_name     [^>]+
+%token  nc:_named_capturing   >       -> default
 
 // Non-capturing group.
 %token  non_capturing_        \(\?:
@@ -90,7 +92,7 @@ simple:
 
 capturing:
     (
-        <named_capturing_> #namedcapturing
+        ::named_capturing_:: <capturing_name> ::_named_capturing:: #namedcapturing
       | ::non_capturing_::
       | ::capturing_:: #capturing
     )
