@@ -17,6 +17,12 @@
 // Non-capturing group.
 %token  non_capturing_        \(\?:
 
+// Lookahead and lookbehind assertions.
+%token  lookahead_            \(\?=
+%token  negative_lookahead_   \(\?!
+%token  lookbehind_           \(\?<=
+%token  negative_lookbehind_  \(\?<!
+
 // Capturing group: (…).
 %token  capturing_            \(
 %token _capturing             \)
@@ -45,7 +51,16 @@ alternation:
     concatenation() ( ::alternation:: concatenation() #alternation )*
 
 #concatenation:
-    quantification()*
+    assertion()* quantification()*
+
+assertion:
+    (
+        ::lookahead_:: #lookahead
+      | ::negative_lookahead_:: #negativelookahead
+      | ::lookbehind_:: #lookbehind
+      | ::negative_lookbehind_:: #negativelookbehind
+    )
+    alternation() ::_capturing::
 
 quantification:
     class()  ( quantifier() #quantification )?
