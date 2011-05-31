@@ -57,9 +57,9 @@ alternation:
 
 assertion:
     (
-        ::lookahead_:: #lookahead
-      | ::negative_lookahead_:: #negativelookahead
-      | ::lookbehind_:: #lookbehind
+        ::lookahead_::           #lookahead
+      | ::negative_lookahead_::  #negativelookahead
+      | ::lookbehind_::          #lookbehind
       | ::negative_lookbehind_:: #negativelookbehind
     )
     alternation() ::_capturing::
