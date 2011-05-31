@@ -150,6 +150,9 @@ class Realdom implements \Hoa\Visitor\Visit {
               break;
 
             case 'token':
+                if('named_capturing_' == $element->getValueToken())
+                    break;
+
                 $out .= str_replace('\\', '', $element->getValueValue());
               break;
 
@@ -281,12 +284,9 @@ class Realdom implements \Hoa\Visitor\Visit {
      */
     protected function range ( ) {
 
-        $value = $this->_element->getChild(0)->getValueValue();
-        $value = explode('-', substr($value, 1, -1));
-
         return chr($this->_sampler->getInteger(
-            ord($value[0]),
-            ord($value[1])
+            ord($this->_element->getChild(0)->getValueValue()),
+            ord($this->_element->getChild(2)->getValueValue())
         ));
     }
 }

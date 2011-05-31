@@ -7,9 +7,9 @@
 
 // Character classes.
 %token  negative_class_       \[\^
-%token  range                 \[.\-.\]
 %token  class_                \[
 %token _class                 \]
+%token  range                 -
 
 // Named capturing group (Perl): (?<name>…).
 %token  named_capturing_      \(\?<[^>]+>
@@ -59,11 +59,13 @@ quantifier:
   | <at_least_n_or_more_m>
   | <n_or_more>
 
-class:
-    ( ::negative_class_:: #negativeclass | ::class_:: #class )
-    <literal>*
+#class:
+    ( ::negative_class_:: #negativeclass <literal>+ )
+  | ( ::class_:: ( range() | <literal> )+ )
     ::_class::
-  | <range> #range
+
+#range:
+    <literal> <range> <literal>
 
 simple:
     capturing()
