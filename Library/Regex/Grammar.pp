@@ -78,9 +78,10 @@ quantifier:
 
 #class:
     (
-        ( ::negative_class_:: #negativeclass <literal>+ )
-      | ( ::class_:: ( range() | <literal> )+ )
+        ::negative_class_:: #negativeclass
+      | ::class_::
     )
+    ( range() | <literal> )+
     ::_class::
 
 #range:
