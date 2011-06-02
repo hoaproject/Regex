@@ -94,7 +94,7 @@ simple:
 capturing:
     (
         ::named_capturing_:: <capturing_name> ::_named_capturing:: #namedcapturing
-      | ::non_capturing_::
+      | ::non_capturing_:: #noncapturing
       | ::capturing_:: #capturing
     )
     alternation() ::_capturing::
