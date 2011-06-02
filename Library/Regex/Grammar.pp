@@ -52,8 +52,9 @@
 alternation:
     concatenation() ( ::alternation:: concatenation() #alternation )*
 
-#concatenation:
-    assertion()* quantification()* assertion()*
+concatenation:
+    (   assertion() | quantification() )
+    ( ( assertion() | quantification() ) #concatenation )*
 
 assertion:
     (
