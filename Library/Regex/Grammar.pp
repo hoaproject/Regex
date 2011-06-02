@@ -18,12 +18,19 @@
 %token  negative_lookbehind_  \(\?<!
 
 // Named capturing group (Perl): (?<name>…).
-%token  named_capturing_      \(\?<   -> nc
+%token  named_capturing_      \(\?<              -> nc
 %token  nc:capturing_name     [^>]+
-%token  nc:_named_capturing   >       -> default
+%token  nc:_named_capturing   >                  -> default
 
 // Non-capturing group.
 %token  non_capturing_        \(\?:
+
+// Conditions.
+%token  named_reference_      \(\?\(<            -> nc
+%token  relative_reference_   \(\?\((?=[\+\-])   -> c
+%token  absolute_reference_   \(\?\((?=\d)       -> c
+%token  c:index               [\+\-]?\d+         -> default
+%token  assertion_reference_  \(\?\(
 
 // Capturing group: (…).
 %token  capturing_            \(
@@ -53,8 +60,23 @@ alternation:
     concatenation() ( ::alternation:: concatenation() #alternation )*
 
 concatenation:
-    (   assertion() | quantification() )
+    condition() ( condition() #concatenation )*
+  | (   assertion() | quantification() )
     ( ( assertion() | quantification() ) #concatenation )*
+
+#condition:
+    (
+        ::named_reference_:: <capturing_name> ::_named_capturing:: #namedcondition
+      | (
+            ::relative_reference_:: #relativecondition
+          | ::absolute_reference_:: #absolutecondition
+        )
+        <index>
+      | ::assertion_reference_:: alternation() #assertioncondition
+    )
+    ::_capturing:: concatenation()?
+    ( ::alternation:: concatenation()? )?
+    ::_capturing::
 
 assertion:
     (
