@@ -6,35 +6,35 @@
 
 
 // Character classes.
-%token  negative_class_       \[\^
-%token  class_                \[
-%token _class                 \]
-%token  range                 -
+%token  negative_class_          \[\^
+%token  class_                   \[
+%token _class                    \]
+%token  range                    -
 
 // Lookahead and lookbehind assertions.
-%token  lookahead_            \(\?=
-%token  negative_lookahead_   \(\?!
-%token  lookbehind_           \(\?<=
-%token  negative_lookbehind_  \(\?<!
+%token  lookahead_               \(\?=
+%token  negative_lookahead_      \(\?!
+%token  lookbehind_              \(\?<=
+%token  negative_lookbehind_     \(\?<!
 
 // Named capturing group (Perl): (?<name>…).
-%token  named_capturing_      \(\?<              -> nc
-%token  nc:capturing_name     [^>]+
-%token  nc:_named_capturing   >                  -> default
+%token  named_capturing_         \(\?<              -> nc
+%token  nc:capturing_name        [^>]+
+%token  nc:_named_capturing      >                  -> default
 
 // Non-capturing group.
-%token  non_capturing_        \(\?:
+%token  non_capturing_           \(\?:
 
 // Conditions.
-%token  named_reference_      \(\?\(<            -> nc
-%token  relative_reference_   \(\?\((?=[\+\-])   -> c
-%token  absolute_reference_   \(\?\((?=\d)       -> c
-%token  c:index               [\+\-]?\d+         -> default
-%token  assertion_reference_  \(\?\(
+%token  named_reference_         \(\?\(<            -> nc
+%token  relative_reference_      \(\?\((?=[\+\-])   -> c
+%token  absolute_reference_      \(\?\((?=\d)       -> c
+%token  c:index                  [\+\-]?\d+         -> default
+%token  assertion_reference_     \(\?\(
 
 // Capturing group: (…).
-%token  capturing_            \(
-%token _capturing             \)
+%token  capturing_               \(
+%token _capturing                \)
 
 // Quantifiers (by default, greedy).
 %token  zero_or_one_possessive   \?\+
@@ -55,7 +55,7 @@
 %token  n_or_more                \{[0-9]+,\}
 
 // Alternation.
-%token alternation            \|
+%token alternation               \|
 
 // Literal.
 %token character                 \\([aefnrt]|c[\x00-\x7f])
