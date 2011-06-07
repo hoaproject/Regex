@@ -36,13 +36,23 @@
 %token  capturing_            \(
 %token _capturing             \)
 
-// Quantifiers.
-%token  zero_or_one           \?
-%token  zero_or_more          \*
-%token  one_or_more           \+
-%token  exactly_n             \{[0-9]+\}
-%token  at_least_n_or_more_m  \{[0-9]+,[0-9]+\}
-%token  n_or_more             \{[0-9]+,\}
+// Quantifiers (by default, greedy).
+%token  zero_or_one_possessive   \?\+
+%token  zero_or_one_lazy         \?\?
+%token  zero_or_one              \?
+%token  zero_or_more_possessive  \*\+
+%token  zero_or_more_lazy        \*\?
+%token  zero_or_more             \*
+%token  one_or_more_possessive   \+\+
+%token  one_or_more_lazy         \+\?
+%token  one_or_more              \+
+%token  exactly_n                \{[0-9]+\}
+%token  n_to_m_possessive        \{[0-9]+,[0-9]+\}\+
+%token  n_to_m_lazy              \{[0-9]+,[0-9]+\}\?
+%token  n_to_m                   \{[0-9]+,[0-9]+\}
+%token  n_or_more_possessive     \{[0-9]+,\}\+
+%token  n_or_more_lazy           \{[0-9]+,\}\?
+%token  n_or_more                \{[0-9]+,\}
 
 // Alternation.
 %token alternation            \|
@@ -91,12 +101,12 @@ quantification:
     ( class() | simple() )  ( quantifier() #quantification )?
 
 quantifier:
-    <zero_or_one>
-  | <zero_or_more>
-  | <one_or_more>
+    <zero_or_one_possessive>  | <zero_or_one_lazy>  | <zero_or_one>
+  | <zero_or_more_possessive> | <zero_or_more_lazy> | <zero_or_more>
+  | <one_or_more_possessive>  | <one_or_more_lazy>  | <one_or_more>
   | <exactly_n>
-  | <at_least_n_or_more_m>
-  | <n_or_more>
+  | <n_to_m_possessive>       | <n_to_m_lazy>       | <n_to_m>
+  | <n_or_more_possessive>    | <n_or_more_lazy>    | <n_or_more>
 
 #class:
     (
