@@ -77,9 +77,8 @@ alternation:
     concatenation() ( ::alternation:: concatenation() #alternation )*
 
 concatenation:
-    condition() ( condition() #concatenation )*
-  | (   assertion() | quantification() )
-    ( ( assertion() | quantification() ) #concatenation )*
+    (   assertion() | quantification() | condition() )
+    ( ( assertion() | quantification() | condition() ) #concatenation )*
 
 #condition:
     (
