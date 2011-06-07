@@ -58,7 +58,14 @@
 %token alternation            \|
 
 // Literal.
-%token literal                .
+%token character                 \\([aefnrt]|c[\x00-\x7f])
+%token dynamic_character         \\([0-7]{,3}|x[0-9a-zA-Z]{,2}|x{[0-9a-zA-Z]+})
+// Please, see PCRESYNTAX(3), General Category properties, PCRE special category
+// properties and script names for \p{} and \P{}.
+%token character_type            \\([CdDhHNRsSvVwWX]|[pP]{[^}]+})
+%token anchor                    \\(bBAZzG)|\^|\$
+%token match_point_reset         \\K
+%token literal                   \\.|.
 
 
 // Rules.
@@ -113,15 +120,15 @@ quantifier:
         ::negative_class_:: #negativeclass
       | ::class_::
     )
-    ( range() | <literal> )+
+    ( range() | literal() )+
     ::_class::
 
 #range:
-    <literal> ::range:: <literal>
+    literal() ::range:: literal()
 
 simple:
     capturing()
-  | <literal>
+  | literal()
 
 #capturing:
     (
@@ -130,3 +137,11 @@ simple:
       | ::capturing_::
     )
     alternation() ::_capturing::
+
+literal:
+    <character>
+  | <dynamic_character>
+  | <character_type>
+  | <anchor>
+  | <match_point_reset>
+  | <literal>
