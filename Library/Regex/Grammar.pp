@@ -19,8 +19,8 @@
 
 // Conditions.
 %token  named_reference_         \(\?\(<            -> nc
-%token  relative_reference_      \(\?\((?=[\+\-])   -> c
 %token  absolute_reference_      \(\?\((?=\d)       -> c
+%token  relative_reference_      \(\?\((?=[\+\-])   -> c
 %token  c:index                  [\+\-]?\d+         -> default
 %token  assertion_reference_     \(\?\(
 
