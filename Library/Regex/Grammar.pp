@@ -88,8 +88,7 @@ assertion:
     alternation() ::_capturing::
 
 quantification:
-    class()  ( quantifier() #quantification )?
-  | simple() ( quantifier() #quantification )?
+    ( class() | simple() )  ( quantifier() #quantification )?
 
 quantifier:
     <zero_or_one>
