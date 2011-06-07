@@ -24,11 +24,18 @@
 %token  c:index                  [\+\-]?\d+         -> default
 %token  assertion_reference_     \(\?\(
 
+// Comments.
+%token  comment_                 \(\?#              -> co
+%token  co:_comment              \)                 -> default
+%token  co:comment               .*?(?=(?<!\\)\))
+
 // Capturing group.
 %token  named_capturing_         \(\?<              -> nc
 %token  nc:_named_capturing      >                  -> default
-%token  nc:capturing_name        [^>]+
+%token  nc:capturing_name        .+?(?=(?<!\\)>)
 %token  non_capturing_           \(\?:
+%token  non_capturing_reset_     \(\?\|
+%token  atomic_group_            \(\?>
 %token  capturing_               \(
 %token _capturing                \)
 
@@ -126,9 +133,12 @@ simple:
   | literal()
 
 #capturing:
-    (
+    ( ::comment_:: <comment>? ::_comment:: #comment )
+  | (
         ::named_capturing_:: <capturing_name> ::_named_capturing:: #namedcapturing
       | ::non_capturing_:: #noncapturing
+      | ::non_capturing_reset_:: #noncapturingreset
+      | ::atomic_group_:: #atomicgroup
       | ::capturing_::
     )
     alternation() ::_capturing::
