@@ -298,6 +298,17 @@ class Realdom implements \Hoa\Visitor\Visit {
             ord($this->_element->getChild(1)->getValueValue())
         ));
     }
+
+    /**
+     * Get the sampler.
+     *
+     * @access  public
+     * @return  \Hoa\Test\Sampler
+     */
+    public function getSampler ( ) {
+
+        return $this->_sampler;
+    }
 }
 
 }
