@@ -72,7 +72,7 @@ class Realdom implements \Hoa\Visitor\Visit {
     protected $_element = null;
 
     /**
-     * Sampler (aka handle).
+     * Sampler.
      *
      * @var \Hoa\Test\Sampler object
      */
@@ -95,6 +95,20 @@ class Realdom implements \Hoa\Visitor\Visit {
 
 
     /**
+     * Build a realdom visitor.
+     *
+     * @access  public
+     * @param   \Hoa\test\Sampler  $sampler    Sampler.
+     * @return  void
+     */
+    public function __construct ( \Hoa\Test\Sampler $sampler ) {
+
+        $this->_sampler = $sampler;
+
+        return;
+    }
+
+    /**
      * Visit an element.
      *
      * @access  public
@@ -108,17 +122,12 @@ class Realdom implements \Hoa\Visitor\Visit {
 
         $out            = null;
         $this->_element = $element;
-        $this->_sampler = $handle;
         $this->_handle  = $handle;
         $this->_eldnah  = $eldnah;
 
         switch($element->getId()) {
 
             case '#expression':
-                if(!($handle instanceof \Hoa\Test\Sampler))
-                    throw new Exception(
-                        'Sampler must be of type \Hoa\Test\Sampler.', 41);
-
                 foreach($element->getChildren() as $child)
                     $out .= $child->accept($this, $handle, $eldnah);
               break;
