@@ -38,7 +38,7 @@
 // pcresyntax.
 //
 // @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
-// @copyright  Copyright © 2007-2011 Frédéric Dadeau, Ivan Enderlin.
+// @copyright  Copyright © 2007-2011 Ivan Enderlin.
 // @license    New BSD License
 //
 
