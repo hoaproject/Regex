@@ -254,10 +254,6 @@ class Realdom implements \Hoa\Visitor\Visit {
               break;
         }
 
-        // Avoid to long repetition.
-        if(null === $upper)
-            $upper = 7;
-
         $child = $this->_element->getChild(0);
         $out   = null;
 
