@@ -145,7 +145,7 @@ assertion:
     alternation() ::_capturing::
 
 quantification:
-    ( class() | simple() )  ( quantifier() #quantification )?
+    ( class() | simple() ) ( quantifier() #quantification )?
 
 quantifier:
     <zero_or_one_possessive>  | <zero_or_one_lazy>  | <zero_or_one>
