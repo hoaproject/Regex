@@ -242,7 +242,7 @@ class Realdom implements \Hoa\Visitor\Visit {
                 $lower = $upper = (int) substr($value, 1, -1);
               break;
 
-            case 'at_least_n_or_more_m':
+            case 'n_to_m':
                 $value = explode(',', substr($value, 1, -1));
                 $lower = (int) trim($value[0]);
                 $upper = (int) trim($value[1]);
