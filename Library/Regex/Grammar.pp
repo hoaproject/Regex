@@ -43,6 +43,9 @@
 //
 
 
+// Skip.
+%skip   nl                       \n
+
 // Character classes.
 %token  negative_class_          \[\^
 %token  class_                   \[
