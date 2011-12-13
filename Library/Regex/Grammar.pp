@@ -31,10 +31,10 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 //
-// Grammar \Hoa\Compiler\Llk.
+// Grammar \Hoa\Regex\Grammar.
 //
-// Provide grammar for the LL(k) parser.
-// More informations at http://pcre.org/pcre.txt, sections pcrepattern &
+// Provide grammar of PCRE (Perl Compatible Regular Expression)for the LL(k)
+// parser. More informations at http://pcre.org/pcre.txt, sections pcrepattern &
 // pcresyntax.
 //
 // @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>

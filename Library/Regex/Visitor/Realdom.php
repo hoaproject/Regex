@@ -98,7 +98,7 @@ class Realdom implements \Hoa\Visitor\Visit {
      * Build a realdom visitor.
      *
      * @access  public
-     * @param   \Hoa\test\Sampler  $sampler    Sampler.
+     * @param   \Hoa\Test\Sampler  $sampler    Sampler.
      * @return  void
      */
     public function __construct ( \Hoa\Test\Sampler $sampler ) {
