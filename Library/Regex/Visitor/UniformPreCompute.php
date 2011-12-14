@@ -1,0 +1,147 @@
+<?php
+
+/**
+ * Hoa
+ *
+ *
+ * @license
+ *
+ * New BSD License
+ *
+ * Copyright © 2007-2011, Ivan Enderlin. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Hoa nor the names of its contributors may be
+ *       used to endorse or promote products derived from this software without
+ *       specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS AND CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Regex\Visitor\Exception
+ */
+-> import('Regex.Visitor.Exception')
+
+/**
+ * \Hoa\Visitor\Visit
+ */
+-> import('Visitor.Visit')
+
+/**
+ * Hoa\Math\Util
+ */
+-> import('Math.Util')
+
+/**
+ * Hoa\Math\Combinatorics\Combination
+ */
+-> import('Math.Combinatorics.Combination');
+
+}
+
+namespace Hoa\Regex\Visitor {
+
+/**
+ * Class \Hoa\Regex\Visitor\UniformPreCompute.
+ *
+ * …
+ *
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
+ */
+
+class UniformPreCompute implements \Hoa\Visitor\Visit {
+
+    protected $_n = 0;
+
+    public function __construct ( $n ) {
+
+        $this->_n = $n;
+
+        return;
+    }
+
+    public function visit ( \Hoa\Visitor\Element $element,
+                            &$handle = null, $eldnah = null ) {
+
+        $n                  = null === $eldnah ? $this->_n : $eldnah;
+        $data               = &$element->getData();
+        $data['precompute'] = array('n' => 0);
+
+        if(0 === $n)
+            return 0;
+
+        $out                = &$data['precompute']['n'];
+
+        switch($element->getId()) {
+
+            case '#expression':
+            case '#capturing':
+            case '#namedcapturing':
+                return $out = $element->getChild(0)->accept($this, $handle, $n);
+              break;
+
+            case '#alternation':
+                foreach($element->getChildren() as $child)
+                    $out += $child->accept($this, $handle, $n);
+
+                return $out;
+              break;
+
+            case '#concatenation':
+                $Γ = \Hoa\Math\Combinatorics\Combination::Γ(
+                    $element->getChildrenNumber(),
+                    $n
+                );
+
+                foreach($Γ as $γ) {
+
+                    if(true === in_array(0, $γ))
+                        continue;
+
+                    $oout = 1;
+
+                    foreach($γ as $α => $_γ)
+                        $oout *= $element->getChild($α)->accept(
+                            $this,
+                            $handle,
+                            $_γ
+                        );
+
+                    $out += $oout;
+                }
+
+                return $out;
+              break;
+
+            case 'token':
+                return $out = \Hoa\Math\Util::δ($n, 1);
+        }
+
+        return -1;
+    }
+}
+
+}
