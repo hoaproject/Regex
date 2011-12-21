@@ -171,6 +171,9 @@ class UniformPreCompute implements \Hoa\Visitor\Visit {
               break;
 
             case '#quantification':
+                if(!isset($data['precompute'][$n]['xy']))
+                    $data['precompute'][$n]['xy'] = array();
+
                 $xy = $element->getChild(1)->getValueValue();
                 $x  = 0;
                 $y  = 0;
@@ -208,9 +211,6 @@ class UniformPreCompute implements \Hoa\Visitor\Visit {
                 }
 
                 for($α = $x; $α <= $y; ++$α) {
-
-                    if(!isset($data['precompute'][$n]['xy']))
-                        $data['precompute'][$n]['xy'] = array();
 
                     $data['precompute'][$n]['xy'][$α] = array();
                     $Γ  = \Hoa\Math\Combinatorics\Combination::Γ($α, $n);
