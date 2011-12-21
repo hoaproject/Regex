@@ -88,10 +88,10 @@ class Uniform implements \Hoa\Visitor\Visit {
      * @param   int                $n          Size.
      * @return  void
      */
-    public function __construct ( \Hoa\Test\Sampler $sampler, $n ) {
+    public function __construct ( \Hoa\Test\Sampler $sampler, $n = 0 ) {
 
         $this->_sampler = $sampler;
-        $this->_n       = $n;
+        $this->setSize($n);
 
         return;
     }
@@ -189,6 +189,32 @@ class Uniform implements \Hoa\Visitor\Visit {
         }
 
         return;
+    }
+
+    /**
+     * Set size.
+     *
+     * @access  public
+     * @param   int  $n    Size.
+     * @return  int
+     */
+    public function setSize ( $n ) {
+
+        $old      = $this->_n;
+        $this->_n = $n;
+
+        return $old;
+    }
+
+    /**
+     * Get size.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getSize ( ) {
+
+        return $this->_n;
     }
 }
 

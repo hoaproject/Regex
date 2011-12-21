@@ -90,14 +90,14 @@ class UniformPreCompute implements \Hoa\Visitor\Visit {
      * @param   int  $n    Size.
      * @return  void
      */
-    public function __construct ( $n ) {
+    public function __construct ( $n = 0 ) {
 
-        $this->_n = $n;
+        $this->setSize($n);
 
         return;
     }
 
-    /**
+   /**
      * Visit an element.
      *
      * @access  public
@@ -257,6 +257,32 @@ class UniformPreCompute implements \Hoa\Visitor\Visit {
         }
 
         return -1;
+    }
+
+    /**
+     * Set size.
+     *
+     * @access  public
+     * @param   int  $n    Size.
+     * @return  int
+     */
+    public function setSize ( $n ) {
+
+        $old      = $this->_n;
+        $this->_n = $n;
+
+        return $old;
+    }
+
+    /**
+     * Get size.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getSize ( ) {
+
+        return $this->_n;
     }
 }
 
