@@ -163,7 +163,7 @@ class Uniform implements \Hoa\Visitor\Visit {
                     if($i <= $b += $st['n'])
                         break;
 
-                for($j = 0; $x <= $α; ++$j, ++$x)
+                for($j = 0; $j < $α; ++$j)
                     $out .= $element->getChild(0)->accept(
                         $this,
                         $handle,
