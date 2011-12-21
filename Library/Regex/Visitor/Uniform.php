@@ -81,7 +81,7 @@ class Uniform implements \Hoa\Visitor\Visit {
         $n    = null === $eldnah ? $this->_n : $eldnah;
         $data = $element->getData();
 
-        if(0 == $computed = $data['precompute']['n'])
+        if(0 == $computed = $data['precompute'][$n]['n'])
             return null;
 
         switch($element->getId()) {
@@ -93,12 +93,13 @@ class Uniform implements \Hoa\Visitor\Visit {
               break;
 
             case '#alternation':
+            case '#class':
                 $stat = array();
 
                 foreach($element->getChildren() as $c => $child) {
 
-                    $handle   = $child->getData();
-                    $stat[$c] = $handle['precompute']['n'];
+                    $foo      = $child->getData();
+                    $stat[$c] = $foo['precompute'][$n]['n'];
                 }
 
                 $i = $this->_sampler->getInteger(1, $computed);
@@ -112,11 +113,44 @@ class Uniform implements \Hoa\Visitor\Visit {
 
             case '#concatenation':
                 $out = null;
+                $Γ   = $data['precompute'][$n]['Γ'];
+                $γ   = $Γ[$this->_sampler->getInteger(0, count($Γ) - 1)];
 
-                foreach($element->getChildren() as $child)
-                    $out .= $child->accept($this, $handle, $n);
+                foreach($element->getChildren() as $i => $child)
+                    $out .= $child->accept($this, $handle, $γ[$i]);
 
                 return $out;
+              break;
+
+            case '#quantification':
+                $out  = null;
+                $stat = $data['precompute'][$n]['xy'];
+                $i    = $this->_sampler->getInteger(1, $computed);
+                $b    = 0;
+                $x    = key($stat);
+
+                foreach($stat as $α => $st)
+                    if($i <= $b += $st['n'])
+                        break;
+
+                for($j = 0; $x <= $α; ++$j, ++$x)
+                    $out .= $element->getChild(0)->accept(
+                        $this,
+                        $handle,
+                        $st['Γ'][$j]
+                    );
+
+                return $out;
+              break;
+
+
+            case '#range':
+                $out = null;
+
+                return chr($this->_sampler->getInteger(
+                    ord($element->getChild(0)->getValueValue()),
+                    ord($element->getChild(1)->getValueValue())
+                ));
               break;
 
             case 'token':

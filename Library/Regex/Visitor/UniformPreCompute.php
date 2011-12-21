@@ -88,12 +88,16 @@ class UniformPreCompute implements \Hoa\Visitor\Visit {
 
         $n                  = null === $eldnah ? $this->_n : $eldnah;
         $data               = &$element->getData();
-        $data['precompute'] = array('n' => 0);
+
+        if(!isset($data['precompute']))
+            $data['precompute'] = array($n => array());
+
+        $data['precompute'][$n]['n'] = 0;
 
         if(0 === $n)
             return 0;
 
-        $out                = &$data['precompute']['n'];
+        $out = &$data['precompute'][$n]['n'];
 
         switch($element->getId()) {
 
@@ -104,6 +108,7 @@ class UniformPreCompute implements \Hoa\Visitor\Visit {
               break;
 
             case '#alternation':
+            case '#class':
                 foreach($element->getChildren() as $child)
                     $out += $child->accept($this, $handle, $n);
 
@@ -111,10 +116,13 @@ class UniformPreCompute implements \Hoa\Visitor\Visit {
               break;
 
             case '#concatenation':
-                $Γ = \Hoa\Math\Combinatorics\Combination::Γ(
+                $Γ  = \Hoa\Math\Combinatorics\Combination::Γ(
                     $element->getChildrenNumber(),
                     $n
                 );
+
+                if(!isset($data['precompute'][$n]['Γ']))
+                    $data['precompute'][$n]['Γ'] = array();
 
                 foreach($Γ as $γ) {
 
@@ -130,10 +138,95 @@ class UniformPreCompute implements \Hoa\Visitor\Visit {
                             $_γ
                         );
 
+                    if(0 !== $oout)
+                        $data['precompute'][$n]['Γ'][] = $γ;
+
                     $out += $oout;
                 }
 
                 return $out;
+              break;
+
+            case '#quantification':
+                $xy = $element->getChild(1)->getValueValue();
+                $x  = 0;
+                $y  = 0;
+
+                switch($element->getChild(1)->getValueToken()) {
+
+                    case 'zero_or_one':
+                        $y = 1;
+                      break;
+
+                    case 'zero_or_more':
+                        $y = null;
+                      break;
+
+                    case 'one_or_more':
+                        $x = 1;
+                        $y = null;
+                      break;
+
+                    case 'exactly_n':
+                        $x = $y = (int) substr($xy, 1, -1);
+                      break;
+
+                    case 'n_to_m':
+                        $xy = explode(',', substr($xy, 1, -1));
+                        $x  = (int) trim($xy[0]);
+                        $y  = (int) trim($xy[1]);
+                      break;
+
+                    case 'n_or_more':
+                        $xy = explode(',', substr($xy, 1, -1));
+                        $x  = (int) trim($xy[0]);
+                        $y  = null;
+                      break;
+                }
+
+                for($α = $x; $α <= $y; ++$α) {
+
+                    if(!isset($data['precompute'][$n]['xy']))
+                        $data['precompute'][$n]['xy'] = array();
+
+                    $data['precompute'][$n]['xy'][$α] = array();
+                    $Γ  = \Hoa\Math\Combinatorics\Combination::Γ($α, $n);
+                    $ut = 0;
+
+                    foreach($Γ as $γ) {
+
+                        if(true === in_array(0, $γ))
+                            continue;
+
+                        $oout = 1;
+
+                        foreach($γ as $β => $_γ)
+                            $oout *= $element->getChild(0)->accept(
+                                $this,
+                                $handle,
+                                $_γ
+                            );
+
+                        if(0 !== $oout)
+                            $data['precompute'][$n]['xy'][$α]['Γ'] = $γ;
+
+                        $ut += $oout;
+                    }
+
+                    $data['precompute'][$n]['xy'][$α]['n'] = $ut;
+                    $out += $ut;
+                }
+
+                return $out;
+              break;
+
+            case '#range':
+                return $out = max(
+                    0,
+                      ord($element->getChild(1)->getValueValue())
+                    - ord($element->getChild(0)->getValueValue())
+                    + 1
+                );
               break;
 
             case 'token':
