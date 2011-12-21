@@ -65,7 +65,7 @@ namespace Hoa\Regex\Visitor {
 /**
  * Class \Hoa\Regex\Visitor\UniformPreCompute.
  *
- * …
+ * Pre-compute the AST.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
@@ -74,8 +74,22 @@ namespace Hoa\Regex\Visitor {
 
 class UniformPreCompute implements \Hoa\Visitor\Visit {
 
+    /**
+     * Given size: n.
+     *
+     * @var \Hoa\Regex\Visitor\UniformPreCompute int
+     */
     protected $_n = 0;
 
+
+
+    /**
+     * Initialize the size.
+     *
+     * @access  public
+     * @param   int  $n    Size.
+     * @return  void
+     */
     public function __construct ( $n ) {
 
         $this->_n = $n;
@@ -83,6 +97,15 @@ class UniformPreCompute implements \Hoa\Visitor\Visit {
         return;
     }
 
+    /**
+     * Visit an element.
+     *
+     * @access  public
+     * @param   \Hoa\Visitor\Element  $element    Element to visit.
+     * @param   mixed                 &$handle    Handle (reference).
+     * @param   mixed                 $eldnah     Handle (not reference).
+     * @return  mixed
+     */
     public function visit ( \Hoa\Visitor\Element $element,
                             &$handle = null, $eldnah = null ) {
 
@@ -116,7 +139,7 @@ class UniformPreCompute implements \Hoa\Visitor\Visit {
               break;
 
             case '#concatenation':
-                $Γ  = \Hoa\Math\Combinatorics\Combination::Γ(
+                $Γ = \Hoa\Math\Combinatorics\Combination::Γ(
                     $element->getChildrenNumber(),
                     $n
                 );

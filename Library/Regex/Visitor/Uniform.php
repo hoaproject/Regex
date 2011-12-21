@@ -55,7 +55,7 @@ namespace Hoa\Regex\Visitor {
 /**
  * Class \Hoa\Regex\Visitor\Uniform.
  *
- * …
+ * Generate a data of size n that can be matched by a PCRE.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2011 Ivan Enderlin.
@@ -64,9 +64,30 @@ namespace Hoa\Regex\Visitor {
 
 class Uniform implements \Hoa\Visitor\Visit {
 
+    /**
+     * Numeric-sampler.
+     *
+     * @var \Hoa\Test\Sampler object
+     */
     protected $_sampler = null;
+
+    /**
+     * Given size: n.
+     *
+     * @var \Hoa\Regex\Visitor\Uniform int
+     */
     protected $_n       = 0;
 
+
+
+    /**
+     * Initialize numeric-sampler and the size.
+     *
+     * @access  public
+     * @param   \Hoa\Test\Sampler  $sampler    Numeric-sampler.
+     * @param   int                $n          Size.
+     * @return  void
+     */
     public function __construct ( \Hoa\Test\Sampler $sampler, $n ) {
 
         $this->_sampler = $sampler;
@@ -75,6 +96,15 @@ class Uniform implements \Hoa\Visitor\Visit {
         return;
     }
 
+    /**
+     * Visit an element.
+     *
+     * @access  public
+     * @param   \Hoa\Visitor\Element  $element    Element to visit.
+     * @param   mixed                 &$handle    Handle (reference).
+     * @param   mixed                 $eldnah     Handle (not reference).
+     * @return  mixed
+     */
     public function visit ( \Hoa\Visitor\Element $element,
                             &$handle = null, $eldnah = null ) {
 
