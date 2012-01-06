@@ -49,12 +49,12 @@ from('Hoa')
 -> import('Visitor.Visit')
 
 /**
- * Hoa\Math\Util
+ * \Hoa\Math\Util
  */
 -> import('Math.Util')
 
 /**
- * Hoa\Math\Combinatorics\Combination
+ * \Hoa\Math\Combinatorics\Combination
  */
 -> import('Math.Combinatorics.Combination');
 
@@ -115,6 +115,9 @@ class UniformPreCompute implements \Hoa\Visitor\Visit {
         if(!isset($data['precompute']))
             $data['precompute'] = array($n => array());
 
+        if(isset($data['precompute'][$n]['n']))
+            return $data['precompute'][$n]['n'];
+
         $data['precompute'][$n]['n'] = 0;
 
         if(0 === $n)
@@ -141,7 +144,8 @@ class UniformPreCompute implements \Hoa\Visitor\Visit {
             case '#concatenation':
                 $Γ = \Hoa\Math\Combinatorics\Combination::Γ(
                     $element->getChildrenNumber(),
-                    $n
+                    $n,
+                    true
                 );
 
                 if(!isset($data['precompute'][$n]['Γ']))
@@ -213,7 +217,7 @@ class UniformPreCompute implements \Hoa\Visitor\Visit {
                 for($α = $x; $α <= $y; ++$α) {
 
                     $data['precompute'][$n]['xy'][$α] = array();
-                    $Γ  = \Hoa\Math\Combinatorics\Combination::Γ($α, $n);
+                    $Γ  = \Hoa\Math\Combinatorics\Combination::Γ($α, $n, true);
                     $ut = 0;
 
                     foreach($Γ as $γ) {
