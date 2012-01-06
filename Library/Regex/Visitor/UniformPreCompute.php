@@ -189,12 +189,12 @@ class UniformPreCompute implements \Hoa\Visitor\Visit {
                       break;
 
                     case 'zero_or_more':
-                        $y = null;
+                        $y = $this->getSize();
                       break;
 
                     case 'one_or_more':
                         $x = 1;
-                        $y = null;
+                        $y = $this->getSize();
                       break;
 
                     case 'exactly_n':
@@ -210,7 +210,7 @@ class UniformPreCompute implements \Hoa\Visitor\Visit {
                     case 'n_or_more':
                         $xy = explode(',', substr($xy, 1, -1));
                         $x  = (int) trim($xy[0]);
-                        $y  = null;
+                        $y  = $this->getSize();
                       break;
                 }
 
