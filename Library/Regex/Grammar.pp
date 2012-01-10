@@ -50,7 +50,7 @@
 %token  negative_class_          \[\^
 %token  class_                   \[
 %token _class                    \]
-%token  range                    -
+%token  range                    \-
 
 // Lookahead and lookbehind assertions.
 %token  lookahead_               \(\?=
