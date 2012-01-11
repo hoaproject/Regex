@@ -103,7 +103,7 @@
 
 // Literal.
 %token character                 \\([aefnrt]|c[\x00-\x7f])
-%token dynamic_character         \\([0-7]{1,3}|x[0-9a-zA-Z]{1,2}|x{[0-9a-zA-Z]+})
+%token dynamic_character         \\([0-7]{3}|x[0-9a-zA-Z]{2}|x{[0-9a-zA-Z]+})
 // Please, see PCRESYNTAX(3), General Category properties, PCRE special category
 // properties and script names for \p{} and \P{}.
 %token character_type            \\([CdDhHNRsSvVwWX]|[pP]{[^}]+})
