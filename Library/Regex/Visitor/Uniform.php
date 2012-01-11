@@ -78,6 +78,9 @@ class Uniform implements \Hoa\Visitor\Visit {
      */
     protected $_n       = 0;
 
+    protected static $_hSpaces = null;
+    protected static $_vSpaces = null;
+
 
 
     /**
@@ -92,6 +95,40 @@ class Uniform implements \Hoa\Visitor\Visit {
 
         $this->_sampler = $sampler;
         $this->setSize($n);
+
+        if(null === self::$_hSpaces)
+            self::$_hSpaces = array(
+                $this->uni_chr(0x0009), // horizontal tab
+                $this->uni_chr(0x0020), // space
+                $this->uni_chr(0x00a0), // non-break space
+                $this->uni_chr(0x1680), // ogham space mark
+                $this->uni_chr(0x180e), // mongolian vowel separator
+                $this->uni_chr(0x2000), // en quad
+                $this->uni_chr(0x2001), // em quad
+                $this->uni_chr(0x2002), // en space
+                $this->uni_chr(0x2003), // em space
+                $this->uni_chr(0x2004), // three-per-em space
+                $this->uni_chr(0x2005), // four-per-em space
+                $this->uni_chr(0x2006), // six-per-em space
+                $this->uni_chr(0x2007), // figure space
+                $this->uni_chr(0x2008), // punctuation space
+                $this->uni_chr(0x2009), // thin space
+                $this->uni_chr(0x200a), // hair space
+                $this->uni_chr(0x202f), // narow no-break space
+                $this->uni_chr(0x205f), // mediaum mathematical space
+                $this->uni_chr(0x3000)  // ideographic space
+            );
+
+        if(null === self::$_vSpaces)
+            self::$_vSpaces = array(
+                $this->uni_chr(0x000a), // linefeed
+                $this->uni_chr(0x000b), // vertical tab
+                $this->uni_chr(0x000c), // formfeed
+                $this->uni_chr(0x000d), // carriage return
+                $this->uni_chr(0x0085), // next line
+                $this->uni_chr(0x2028), // line separator
+                $this->uni_chr(0x2029)  // paragraph separator
+            );
 
         return;
     }
@@ -184,7 +221,106 @@ class Uniform implements \Hoa\Visitor\Visit {
               break;
 
             case 'token':
-                return str_replace('\\', '', $element->getValueValue());
+                $value = $element->getValueValue();
+
+                switch($element->getValueToken()) {
+
+                    case 'character':
+                        switch($value) {
+
+                            case '\a':
+                                return "\a";
+
+                            case '\e':
+                                return "\e";
+
+                            case '\f':
+                                return "\f";
+
+                            case '\n':
+                                return "\n";
+
+                            case '\r':
+                                return "\r";
+
+                            case '\t':
+                                return "\t";
+
+                            default:
+                                return chr($value[2]);
+                        }
+                      break;
+
+                    case 'dynamic_character':
+                        $value = ltrim($value, '\\');
+
+                        switch($value[0]) {
+
+                            case 'x':
+                                $value = trim($value, 'x{}');
+                                return $this->uni_chr($value);
+                              break;
+
+                            default:
+                                return chr(octdec($value));
+                        }
+                      break;
+
+                    case 'character_type':
+                        $value = ltrim($value, '\\');
+
+                        switch($value) {
+
+                            case 'C':
+                                return $this->_sampler->getInteger(0, 127);
+
+                            case 'd':
+                                return $this->_sampler->getInteger(0, 9);
+
+                            case 's':
+                                $value = $this->_sampler->getInteger(0, 1)
+                                             ? 'h'
+                                             : 'v';
+
+                            case 'h':
+                                return static::$_hSpaces[
+                                    $this->_sampler->getInteger(
+                                        0,
+                                        count(static::$_hSpaces) - 1
+                                    )
+                                ];
+
+                            case 'v':
+                                return static::$_vSpaces[
+                                    $this->_sampler->getInteger(
+                                        0,
+                                        count(static::$_vSpaces) - 1
+                                    )
+                                ];
+
+                            case 'w':
+                                $_  = array_merge(
+                                    range(0x41, 0x5a),
+                                    range(0x61, 0x7a),
+                                    array(0x5f)
+                                );
+
+                                return $this->uni_chr(dechex($_[
+                                    $this->_sampler->getInteger(
+                                        0,
+                                        count($_) - 1
+                                    )
+                                ]));
+
+                            default:
+                                return '?';
+                        }
+                      break;
+
+                    case 'literal':
+                        return str_replace('\\', '', $element->getValueValue());
+                }
+
               break;
         }
 
@@ -215,6 +351,15 @@ class Uniform implements \Hoa\Visitor\Visit {
     public function getSize ( ) {
 
         return $this->_n;
+    }
+
+    public function uni_chr ( $hexa ) {
+
+        return mb_convert_encoding(
+            '&#' . hexdec($hexa) . ';',
+            'UTF-8',
+            'HTML-ENTITIES'
+        );
     }
 }
 
