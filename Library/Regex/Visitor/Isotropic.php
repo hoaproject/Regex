@@ -178,6 +178,24 @@ class Isotropic implements \Hoa\Visitor\Visit {
                 return $out;
               break;
 
+            case '#negativeclass':
+                $d = new \Hoa\Compiler\Visitor\Dump();
+                echo $d->visit($element);
+
+                $c = array();
+
+                foreach($element->getChildren() as $child)
+                    $c[ord($child->accept($this, $handle, $eldnah))] = true;
+
+                do {
+
+                    // all printable ASCII.
+                    $i = $this->_sampler->getInteger(32, 126);
+                } while(isset($c[$i]));
+
+                return chr($i);
+              break;
+
 
             case '#range':
                 $out = null;
