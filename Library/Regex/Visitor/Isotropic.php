@@ -179,9 +179,6 @@ class Isotropic implements \Hoa\Visitor\Visit {
               break;
 
             case '#negativeclass':
-                $d = new \Hoa\Compiler\Visitor\Dump();
-                echo $d->visit($element);
-
                 $c = array();
 
                 foreach($element->getChildren() as $child)
