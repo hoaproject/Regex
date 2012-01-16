@@ -46,23 +46,28 @@ from('Hoa')
 /**
  * \Hoa\Visitor\Visit
  */
--> import('Visitor.Visit');
+-> import('Visitor.Visit')
+
+/**
+ * \Hoa\String\Unicode\Util
+ */
+-> import('String.Unicode.Util');
 
 }
 
 namespace Hoa\Regex\Visitor {
 
 /**
- * Class \Hoa\Regex\Visitor\Uniform.
+ * Class \Hoa\Regex\Visitor\Isotropic.
  *
- * Generate a data of size n that can be matched by a PCRE.
+ * Isotropic walk on the AST to generate a data.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Uniform implements \Hoa\Visitor\Visit {
+class Isotropic implements \Hoa\Visitor\Visit {
 
     /**
      * Numeric-sampler.
@@ -71,64 +76,18 @@ class Uniform implements \Hoa\Visitor\Visit {
      */
     protected $_sampler = null;
 
-    /**
-     * Given size: n.
-     *
-     * @var \Hoa\Regex\Visitor\Uniform int
-     */
-    protected $_n       = 0;
-
-    protected static $_hSpaces = null;
-    protected static $_vSpaces = null;
-
 
 
     /**
-     * Initialize numeric-sampler and the size.
+     * Initialize numeric-sampler.
      *
      * @access  public
      * @param   \Hoa\Test\Sampler  $sampler    Numeric-sampler.
-     * @param   int                $n          Size.
      * @return  void
      */
-    public function __construct ( \Hoa\Test\Sampler $sampler, $n = 0 ) {
+    public function __construct ( \Hoa\Test\Sampler $sampler ) {
 
         $this->_sampler = $sampler;
-        $this->setSize($n);
-
-        if(null === self::$_hSpaces)
-            self::$_hSpaces = array(
-                $this->uni_chr(0x0009), // horizontal tab
-                $this->uni_chr(0x0020), // space
-                $this->uni_chr(0x00a0), // non-break space
-                $this->uni_chr(0x1680), // ogham space mark
-                $this->uni_chr(0x180e), // mongolian vowel separator
-                $this->uni_chr(0x2000), // en quad
-                $this->uni_chr(0x2001), // em quad
-                $this->uni_chr(0x2002), // en space
-                $this->uni_chr(0x2003), // em space
-                $this->uni_chr(0x2004), // three-per-em space
-                $this->uni_chr(0x2005), // four-per-em space
-                $this->uni_chr(0x2006), // six-per-em space
-                $this->uni_chr(0x2007), // figure space
-                $this->uni_chr(0x2008), // punctuation space
-                $this->uni_chr(0x2009), // thin space
-                $this->uni_chr(0x200a), // hair space
-                $this->uni_chr(0x202f), // narow no-break space
-                $this->uni_chr(0x205f), // mediaum mathematical space
-                $this->uni_chr(0x3000)  // ideographic space
-            );
-
-        if(null === self::$_vSpaces)
-            self::$_vSpaces = array(
-                $this->uni_chr(0x000a), // linefeed
-                $this->uni_chr(0x000b), // vertical tab
-                $this->uni_chr(0x000c), // formfeed
-                $this->uni_chr(0x000d), // carriage return
-                $this->uni_chr(0x0085), // next line
-                $this->uni_chr(0x2028), // line separator
-                $this->uni_chr(0x2029)  // paragraph separator
-            );
 
         return;
     }
@@ -145,69 +104,93 @@ class Uniform implements \Hoa\Visitor\Visit {
     public function visit ( \Hoa\Visitor\Element $element,
                             &$handle = null, $eldnah = null ) {
 
-        $n    = null === $eldnah ? $this->_n : $eldnah;
-        $data = $element->getData();
-
-        if(0 == $computed = $data['precompute'][$n]['n'])
-            return null;
-
         switch($element->getId()) {
 
             case '#expression':
             case '#capturing':
             case '#namedcapturing':
-                return $element->getChild(0)->accept($this, $handle, $n);
+                return $element->getChild(0)->accept($this, $handle, $eldnah);
               break;
 
             case '#alternation':
             case '#class':
-                $stat = array();
-
-                foreach($element->getChildren() as $c => $child) {
-
-                    $foo      = $child->getData();
-                    $stat[$c] = $foo['precompute'][$n]['n'];
-                }
-
-                $i = $this->_sampler->getInteger(1, $computed);
-
-                for($e = 0, $b = $stat[$e], $max = count($stat);
-                    $e < $max - 1 && $i > $b;
-                    $b += $stat[++$e]);
-
-                return $element->getChild($e)->accept($this, $handle, $n);
+                return $element->getChild($this->_sampler->getInteger(
+                    0,
+                    $element->getChildrenNumber() - 1
+                ))->accept($this, $handle, $eldnah);
               break;
 
             case '#concatenation':
-                $out      = null;
-                $Γ        = $data['precompute'][$n]['Γ'];
-                $γ        = $Γ[$this->_sampler->getInteger(0, count($Γ) - 1)];
+                $out = null;
 
-                foreach($element->getChildre() as $i => $child)
-                    $out .= $child->accept($this, $handle, $γ[$i]);
+                foreach($element->getChildren() as $child)
+                    $out .= $child->accept($this, $handle, $eldnah);
 
                 return $out;
               break;
 
             case '#quantification':
-                $out  = null;
-                $stat = $data['precompute'][$n]['xy'];
-                $i    = $this->_sampler->getInteger(1, $computed);
-                $b    = 0;
-                $x    = key($stat);
+                $out = null;
+                $xy  = $element->getChild(1)->getValueValue();
+                $x   = 0;
+                $y   = 0;
 
-                foreach($stat as $α => $st)
-                    if($i <= $b += $st['n'])
-                        break;
+                switch($element->getChild(1)->getValueToken()) {
 
-                for($j = 0; $j < $α; ++$j)
+                    case 'zero_or_one':
+                        $y = 1;
+                      break;
+
+                    case 'zero_or_more':
+                        $y = 5; // why not?
+                      break;
+
+                    case 'one_or_more':
+                        $x = 1;
+                        $y = 5; // why not?
+                      break;
+
+                    case 'exactly_n':
+                        $x = $y = (int) substr($xy, 1, -1);
+                      break;
+
+                    case 'n_to_m':
+                        $xy = explode(',', substr($xy, 1, -1));
+                        $x  = (int) trim($xy[0]);
+                        $y  = (int) trim($xy[1]);
+                      break;
+
+                    case 'n_or_more':
+                        $xy = explode(',', substr($xy, 1, -1));
+                        $x  = (int) trim($xy[0]);
+                        $y  = 5; // why not?
+                      break;
+                }
+
+                for($i = 0, $max = $this->_sampler->getInteger($x, $y);
+                    $i < $max; ++$i)
                     $out .= $element->getChild(0)->accept(
                         $this,
                         $handle,
-                        $st['Γ'][$j]
+                        $eldnah
                     );
 
                 return $out;
+              break;
+
+            case '#negativeclass':
+                $c = array();
+
+                foreach($element->getChildren() as $child)
+                    $c[ord($child->accept($this, $handle, $eldnah))] = true;
+
+                do {
+
+                    // all printable ASCII.
+                    $i = $this->_sampler->getInteger(32, 126);
+                } while(isset($c[$i]));
+
+                return chr($i);
               break;
 
 
@@ -226,24 +209,25 @@ class Uniform implements \Hoa\Visitor\Visit {
                 switch($element->getValueToken()) {
 
                     case 'character':
+                        $value = ltrim($value, '\\');
                         switch($value) {
 
-                            case '\a':
+                            case 'a':
                                 return "\a";
 
-                            case '\e':
+                            case 'e':
                                 return "\e";
 
-                            case '\f':
+                            case 'f':
                                 return "\f";
 
-                            case '\n':
+                            case 'n':
                                 return "\n";
 
-                            case '\r':
+                            case 'r':
                                 return "\r";
 
-                            case '\t':
+                            case 't':
                                 return "\t";
 
                             default:
@@ -258,7 +242,9 @@ class Uniform implements \Hoa\Visitor\Visit {
 
                             case 'x':
                                 $value = trim($value, 'x{}');
-                                return $this->uni_chr($value);
+                                return \Hoa\String\Unicode\Util::fromCode(
+                                    hexdec($value)
+                                );
                               break;
 
                             default:
@@ -283,34 +269,43 @@ class Uniform implements \Hoa\Visitor\Visit {
                                              : 'v';
 
                             case 'h':
-                                return static::$_hSpaces[
-                                    $this->_sampler->getInteger(
-                                        0,
-                                        count(static::$_hSpaces) - 1
-                                    )
-                                ];
+                                $h = array(
+                                    chr(0x0009),
+                                    chr(0x0020),
+                                    chr(0x00a0)
+                                );
+
+                                return $h[$this->_sampler->getInteger(
+                                    0,
+                                    count($h) -1
+                                )];
 
                             case 'v':
-                                return static::$_vSpaces[
-                                    $this->_sampler->getInteger(
-                                        0,
-                                        count(static::$_vSpaces) - 1
-                                    )
-                                ];
+                                $v = array(
+                                    chr(0x000a),
+                                    chr(0x000b),
+                                    chr(0x000c),
+                                    chr(0x000d)
+                                );
+
+                                return $v[$this->_sampler->getInteger(
+                                    0,
+                                    count($v) -1
+                                )];
 
                             case 'w':
-                                $_  = array_merge(
+                                $w  = array_merge(
                                     range(0x41, 0x5a),
                                     range(0x61, 0x7a),
                                     array(0x5f)
                                 );
 
-                                return $this->uni_chr(dechex($_[
+                                return chr($w[
                                     $this->_sampler->getInteger(
                                         0,
-                                        count($_) - 1
+                                        count($w) - 1
                                     )
-                                ]));
+                                ]);
 
                             default:
                                 return '?';
@@ -325,41 +320,6 @@ class Uniform implements \Hoa\Visitor\Visit {
         }
 
         return;
-    }
-
-    /**
-     * Set size.
-     *
-     * @access  public
-     * @param   int  $n    Size.
-     * @return  int
-     */
-    public function setSize ( $n ) {
-
-        $old      = $this->_n;
-        $this->_n = $n;
-
-        return $old;
-    }
-
-    /**
-     * Get size.
-     *
-     * @access  public
-     * @return  int
-     */
-    public function getSize ( ) {
-
-        return $this->_n;
-    }
-
-    public function uni_chr ( $hexa ) {
-
-        return mb_convert_encoding(
-            '&#' . hexdec($hexa) . ';',
-            'UTF-8',
-            'HTML-ENTITIES'
-        );
     }
 }
 
