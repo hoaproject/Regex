@@ -193,13 +193,12 @@ class Isotropic implements \Hoa\Visitor\Visit {
                 return chr($i);
               break;
 
-
             case '#range':
                 $out = null;
 
                 return chr($this->_sampler->getInteger(
-                    ord($element->getChild(0)->getValueValue()),
-                    ord($element->getChild(1)->getValueValue())
+                    ord($element->getChild(0)->accept($this, $handle, $eldnah)),
+                    ord($element->getChild(1)->accept($this, $handle, $eldnah))
                 ));
               break;
 
@@ -313,7 +312,7 @@ class Isotropic implements \Hoa\Visitor\Visit {
                       break;
 
                     case 'literal':
-                        return str_replace('\\', '', $element->getValueValue());
+                        return str_replace('\\\\', '\\', $element->getValueValue());
                 }
 
               break;

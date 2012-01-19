@@ -247,11 +247,20 @@ class UniformPreCompute implements \Hoa\Visitor\Visit {
                 return $out;
               break;
 
+            case '#negativeclass':
+                $minus = 0;
+
+                foreach($element->getChildren() as $child)
+                    $minus += $child->accept($this, $handle, $n);
+
+                return $out = 126 - 32 - $minus;
+              break;
+
             case '#range':
                 return $out = max(
                     0,
-                      ord($element->getChild(1)->getValueValue())
-                    - ord($element->getChild(0)->getValueValue())
+                      ord($this->tokenToChar($element->getChild(1))),
+                    - ord($this->tokenToChar($element->getChild(0))),
                     + 1
                 );
               break;
@@ -287,6 +296,109 @@ class UniformPreCompute implements \Hoa\Visitor\Visit {
     public function getSize ( ) {
 
         return $this->_n;
+    }
+
+    public function tokenToChar ( $element ) {
+
+        $value = $element->getValueValue();
+
+        switch($element->getValueToken()) {
+
+            case 'character':
+                switch($value) {
+
+                    case '\a':
+                        return "\a";
+
+                    case '\e':
+                        return "\e";
+
+                    case '\f':
+                        return "\f";
+
+                    case '\n':
+                        return "\n";
+
+                    case '\r':
+                        return "\r";
+
+                    case '\t':
+                        return "\t";
+
+                    default:
+                        return chr($value[2]);
+                }
+              break;
+
+            case 'dynamic_character':
+                $value = ltrim($value, '\\');
+
+                switch($value[0]) {
+
+                    case 'x':
+                        $value = trim($value, 'x{}');
+                        return $this->uni_chr($value);
+                      break;
+
+                    default:
+                        return chr(octdec($value));
+                }
+              break;
+
+            case 'character_type':
+                $value = ltrim($value, '\\');
+
+                switch($value) {
+
+                    case 'C':
+                        return $this->_sampler->getInteger(0, 127);
+
+                    case 'd':
+                        return $this->_sampler->getInteger(0, 9);
+
+                    case 's':
+                        $value = $this->_sampler->getInteger(0, 1)
+                                     ? 'h'
+                                     : 'v';
+
+                    case 'h':
+                        return static::$_hSpaces[
+                            $this->_sampler->getInteger(
+                                0,
+                                count(static::$_hSpaces) - 1
+                            )
+                        ];
+
+                    case 'v':
+                        return static::$_vSpaces[
+                            $this->_sampler->getInteger(
+                                0,
+                                count(static::$_vSpaces) - 1
+                            )
+                        ];
+
+                    case 'w':
+                        $_  = array_merge(
+                            range(0x41, 0x5a),
+                            range(0x61, 0x7a),
+                            array(0x5f)
+                        );
+
+                        return $this->uni_chr(dechex($_[
+                            $this->_sampler->getInteger(
+                                0,
+                                count($_) - 1
+                            )
+                        ]));
+
+                    default:
+                        return '?';
+                }
+              break;
+
+            case 'literal':
+                return str_replace('\\\\', '\\', $element->getValueValue());
+        }
     }
 }
 

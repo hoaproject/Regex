@@ -183,7 +183,7 @@ class Uniform implements \Hoa\Visitor\Visit {
                 $Γ        = $data['precompute'][$n]['Γ'];
                 $γ        = $Γ[$this->_sampler->getInteger(0, count($Γ) - 1)];
 
-                foreach($element->getChildre() as $i => $child)
+                foreach($element->getChildren() as $i => $child)
                     $out .= $child->accept($this, $handle, $γ[$i]);
 
                 return $out;
@@ -210,13 +210,27 @@ class Uniform implements \Hoa\Visitor\Visit {
                 return $out;
               break;
 
+            case '#negativeclass':
+                $c = array();
+
+                foreach($element->getChildren() as $child)
+                    $c[ord($child->accept($this, $handle, $eldnah))] = true;
+
+                do {
+
+                    // all printable ASCII.
+                    $i = $this->_sampler->getInteger(32, 126);
+                } while(isset($c[$i]));
+
+                return chr($i);
+              break;
 
             case '#range':
                 $out = null;
 
                 return chr($this->_sampler->getInteger(
-                    ord($element->getChild(0)->getValueValue()),
-                    ord($element->getChild(1)->getValueValue())
+                    ord($element->getChild(0)->accept($this, $handle, $eldnah)),
+                    ord($element->getChild(1)->accept($this, $handle, $eldnah))
                 ));
               break;
 
@@ -318,13 +332,12 @@ class Uniform implements \Hoa\Visitor\Visit {
                       break;
 
                     case 'literal':
-                        return str_replace('\\', '', $element->getValueValue());
+                        return str_replace('\\\\', '\\', $element->getValueValue());
                 }
-
               break;
         }
 
-        return;
+        return -1;
     }
 
     /**
