@@ -312,7 +312,11 @@ class Isotropic implements \Hoa\Visitor\Visit {
                       break;
 
                     case 'literal':
-                        return str_replace('\\\\', '\\', $element->getValueValue());
+                        return str_replace('\\\\', '\\', preg_replace(
+                            '#\\\(?!\\\)#',
+                            '',
+                            $element->getValueValue()
+                        ));
                 }
 
               break;
