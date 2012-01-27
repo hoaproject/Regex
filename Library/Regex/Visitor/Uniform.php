@@ -44,9 +44,9 @@ from('Hoa')
 -> import('Regex.Visitor.Exception')
 
 /**
- * \Hoa\Visitor\Visit
+ * \Hoa\Regex\Visitor\Visit
  */
--> import('Visitor.Visit');
+-> import('Regex.Visitor.Visit');
 
 }
 
@@ -62,7 +62,7 @@ namespace Hoa\Regex\Visitor {
  * @license    New BSD License
  */
 
-class Uniform implements \Hoa\Visitor\Visit {
+class Uniform implements Visit {
 
     /**
      * Numeric-sampler.

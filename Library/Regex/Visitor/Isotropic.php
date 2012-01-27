@@ -44,9 +44,9 @@ from('Hoa')
 -> import('Regex.Visitor.Exception')
 
 /**
- * \Hoa\Visitor\Visit
+ * \Hoa\Regex\Visitor\Visit
  */
--> import('Visitor.Visit')
+-> import('Regex.Visitor.Visit')
 
 /**
  * \Hoa\String\Unicode\Util
@@ -67,7 +67,7 @@ namespace Hoa\Regex\Visitor {
  * @license    New BSD License
  */
 
-class Isotropic implements \Hoa\Visitor\Visit {
+class Isotropic implements Visit {
 
     /**
      * Numeric-sampler.

@@ -44,9 +44,9 @@ from('Hoa')
 -> import('Regex.Visitor.Exception')
 
 /**
- * \Hoa\Visitor\Visit
+ * \Hoa\Regex\Visitor\Visit
  */
--> import('Visitor.Visit')
+-> import('Regex.Visitor.Visit')
 
 /**
  * \Hoa\Math\Util
@@ -72,7 +72,7 @@ namespace Hoa\Regex\Visitor {
  * @license    New BSD License
  */
 
-class UniformPreCompute implements \Hoa\Visitor\Visit {
+class UniformPreCompute implements Visit {
 
     /**
      * Given size: n.
