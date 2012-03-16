@@ -174,7 +174,7 @@ simple:
   | literal()
 
 #capturing:
-    ( ::comment_:: <comment>? ::_comment:: #comment )
+    ::comment_:: <comment>? ::_comment:: #comment
   | (
         ::named_capturing_:: <capturing_name> ::_named_capturing:: #namedcapturing
       | ::non_capturing_:: #noncapturing
