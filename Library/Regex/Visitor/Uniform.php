@@ -46,7 +46,12 @@ from('Hoa')
 /**
  * \Hoa\Regex\Visitor\Visit
  */
--> import('Regex.Visitor.Visit');
+-> import('Regex.Visitor.Visit')
+
+/**
+ * \Hoa\String\Unicode\Util
+ */
+-> import('String.Unicode.Util');
 
 }
 
@@ -69,16 +74,27 @@ class Uniform implements Visit {
      *
      * @var \Hoa\Test\Sampler object
      */
-    protected $_sampler = null;
+    protected $_sampler        = null;
 
     /**
      * Given size: n.
      *
      * @var \Hoa\Regex\Visitor\Uniform int
      */
-    protected $_n       = 0;
+    protected $_n              = 0;
 
+    /**
+     * Horizontal spaces.
+     *
+     * @var \Hoa\Regex\Visitor\Uniform array
+     */
     protected static $_hSpaces = null;
+
+    /**
+     * Vertical spaces.
+     *
+     * @var \Hoa\Regex\Visitor\Uniform array
+     */
     protected static $_vSpaces = null;
 
 
@@ -98,36 +114,36 @@ class Uniform implements Visit {
 
         if(null === self::$_hSpaces)
             self::$_hSpaces = array(
-                $this->uni_chr(0x0009), // horizontal tab
-                $this->uni_chr(0x0020), // space
-                $this->uni_chr(0x00a0), // non-break space
-                $this->uni_chr(0x1680), // ogham space mark
-                $this->uni_chr(0x180e), // mongolian vowel separator
-                $this->uni_chr(0x2000), // en quad
-                $this->uni_chr(0x2001), // em quad
-                $this->uni_chr(0x2002), // en space
-                $this->uni_chr(0x2003), // em space
-                $this->uni_chr(0x2004), // three-per-em space
-                $this->uni_chr(0x2005), // four-per-em space
-                $this->uni_chr(0x2006), // six-per-em space
-                $this->uni_chr(0x2007), // figure space
-                $this->uni_chr(0x2008), // punctuation space
-                $this->uni_chr(0x2009), // thin space
-                $this->uni_chr(0x200a), // hair space
-                $this->uni_chr(0x202f), // narow no-break space
-                $this->uni_chr(0x205f), // mediaum mathematical space
-                $this->uni_chr(0x3000)  // ideographic space
+                \Hoa\String\Unicode\Util::fromCode(0x0009), // horizontal tab
+                \Hoa\String\Unicode\Util::fromCode(0x0020), // space
+                \Hoa\String\Unicode\Util::fromCode(0x00a0), // non-break space
+                \Hoa\String\Unicode\Util::fromCode(0x1680), // ogham space mark
+                \Hoa\String\Unicode\Util::fromCode(0x180e), // mongolian vowel separator
+                \Hoa\String\Unicode\Util::fromCode(0x2000), // en quad
+                \Hoa\String\Unicode\Util::fromCode(0x2001), // em quad
+                \Hoa\String\Unicode\Util::fromCode(0x2002), // en space
+                \Hoa\String\Unicode\Util::fromCode(0x2003), // em space
+                \Hoa\String\Unicode\Util::fromCode(0x2004), // three-per-em space
+                \Hoa\String\Unicode\Util::fromCode(0x2005), // four-per-em space
+                \Hoa\String\Unicode\Util::fromCode(0x2006), // six-per-em space
+                \Hoa\String\Unicode\Util::fromCode(0x2007), // figure space
+                \Hoa\String\Unicode\Util::fromCode(0x2008), // punctuation space
+                \Hoa\String\Unicode\Util::fromCode(0x2009), // thin space
+                \Hoa\String\Unicode\Util::fromCode(0x200a), // hair space
+                \Hoa\String\Unicode\Util::fromCode(0x202f), // narow no-break space
+                \Hoa\String\Unicode\Util::fromCode(0x205f), // mediaum mathematical space
+                \Hoa\String\Unicode\Util::fromCode(0x3000)  // ideographic space
             );
 
         if(null === self::$_vSpaces)
             self::$_vSpaces = array(
-                $this->uni_chr(0x000a), // linefeed
-                $this->uni_chr(0x000b), // vertical tab
-                $this->uni_chr(0x000c), // formfeed
-                $this->uni_chr(0x000d), // carriage return
-                $this->uni_chr(0x0085), // next line
-                $this->uni_chr(0x2028), // line separator
-                $this->uni_chr(0x2029)  // paragraph separator
+                \Hoa\String\Unicode\Util::fromCode(0x000a), // linefeed
+                \Hoa\String\Unicode\Util::fromCode(0x000b), // vertical tab
+                \Hoa\String\Unicode\Util::fromCode(0x000c), // formfeed
+                \Hoa\String\Unicode\Util::fromCode(0x000d), // carriage return
+                \Hoa\String\Unicode\Util::fromCode(0x0085), // next line
+                \Hoa\String\Unicode\Util::fromCode(0x2028), // line separator
+                \Hoa\String\Unicode\Util::fromCode(0x2029)  // paragraph separator
             );
 
         return;
@@ -148,7 +164,8 @@ class Uniform implements Visit {
         $n    = null === $eldnah ? $this->_n : $eldnah;
         $data = $element->getData();
 
-        if(0 == $computed = $data['precompute'][$n]['n'])
+        if(   isset($data['precompute'])
+           && 0 == $computed = $data['precompute'][$n]['n'])
             return null;
 
         switch($element->getId()) {
@@ -272,7 +289,7 @@ class Uniform implements Visit {
 
                             case 'x':
                                 $value = trim($value, 'x{}');
-                                return $this->uni_chr($value);
+                                return \Hoa\String\Unicode\Util::fromCode($value);
                               break;
 
                             default:
@@ -319,7 +336,7 @@ class Uniform implements Visit {
                                     array(0x5f)
                                 );
 
-                                return $this->uni_chr(dechex($_[
+                                return \Hoa\String\Unicode\Util::fromCode(dechex($_[
                                     $this->_sampler->getInteger(
                                         0,
                                         count($_) - 1
@@ -368,15 +385,6 @@ class Uniform implements Visit {
     public function getSize ( ) {
 
         return $this->_n;
-    }
-
-    public function uni_chr ( $hexa ) {
-
-        return mb_convert_encoding(
-            '&#' . hexdec($hexa) . ';',
-            'UTF-8',
-            'HTML-ENTITIES'
-        );
     }
 }
 
