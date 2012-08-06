@@ -49,9 +49,9 @@ from('Hoa')
 -> import('Regex.Visitor.Visit')
 
 /**
- * \Hoa\String\Unicode\Util
+ * \Hoa\String
  */
--> import('String.Unicode.Util');
+-> import('String.~');
 
 }
 
@@ -241,7 +241,7 @@ class Isotropic implements Visit {
 
                             case 'x':
                                 $value = trim($value, 'x{}');
-                                return \Hoa\String\Unicode\Util::fromCode(
+                                return \Hoa\String::fromCode(
                                     hexdec($value)
                                 );
                               break;

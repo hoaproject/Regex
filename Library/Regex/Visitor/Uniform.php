@@ -49,9 +49,9 @@ from('Hoa')
 -> import('Regex.Visitor.Visit')
 
 /**
- * \Hoa\String\Unicode\Util
+ * \Hoa\String
  */
--> import('String.Unicode.Util');
+-> import('String.~');
 
 }
 
@@ -114,36 +114,36 @@ class Uniform implements Visit {
 
         if(null === self::$_hSpaces)
             self::$_hSpaces = array(
-                \Hoa\String\Unicode\Util::fromCode(0x0009), // horizontal tab
-                \Hoa\String\Unicode\Util::fromCode(0x0020), // space
-                \Hoa\String\Unicode\Util::fromCode(0x00a0), // non-break space
-                \Hoa\String\Unicode\Util::fromCode(0x1680), // ogham space mark
-                \Hoa\String\Unicode\Util::fromCode(0x180e), // mongolian vowel separator
-                \Hoa\String\Unicode\Util::fromCode(0x2000), // en quad
-                \Hoa\String\Unicode\Util::fromCode(0x2001), // em quad
-                \Hoa\String\Unicode\Util::fromCode(0x2002), // en space
-                \Hoa\String\Unicode\Util::fromCode(0x2003), // em space
-                \Hoa\String\Unicode\Util::fromCode(0x2004), // three-per-em space
-                \Hoa\String\Unicode\Util::fromCode(0x2005), // four-per-em space
-                \Hoa\String\Unicode\Util::fromCode(0x2006), // six-per-em space
-                \Hoa\String\Unicode\Util::fromCode(0x2007), // figure space
-                \Hoa\String\Unicode\Util::fromCode(0x2008), // punctuation space
-                \Hoa\String\Unicode\Util::fromCode(0x2009), // thin space
-                \Hoa\String\Unicode\Util::fromCode(0x200a), // hair space
-                \Hoa\String\Unicode\Util::fromCode(0x202f), // narow no-break space
-                \Hoa\String\Unicode\Util::fromCode(0x205f), // mediaum mathematical space
-                \Hoa\String\Unicode\Util::fromCode(0x3000)  // ideographic space
+                \Hoa\String::fromCode(0x0009), // horizontal tab
+                \Hoa\String::fromCode(0x0020), // space
+                \Hoa\String::fromCode(0x00a0), // non-break space
+                \Hoa\String::fromCode(0x1680), // ogham space mark
+                \Hoa\String::fromCode(0x180e), // mongolian vowel separator
+                \Hoa\String::fromCode(0x2000), // en quad
+                \Hoa\String::fromCode(0x2001), // em quad
+                \Hoa\String::fromCode(0x2002), // en space
+                \Hoa\String::fromCode(0x2003), // em space
+                \Hoa\String::fromCode(0x2004), // three-per-em space
+                \Hoa\String::fromCode(0x2005), // four-per-em space
+                \Hoa\String::fromCode(0x2006), // six-per-em space
+                \Hoa\String::fromCode(0x2007), // figure space
+                \Hoa\String::fromCode(0x2008), // punctuation space
+                \Hoa\String::fromCode(0x2009), // thin space
+                \Hoa\String::fromCode(0x200a), // hair space
+                \Hoa\String::fromCode(0x202f), // narow no-break space
+                \Hoa\String::fromCode(0x205f), // mediaum mathematical space
+                \Hoa\String::fromCode(0x3000)  // ideographic space
             );
 
         if(null === self::$_vSpaces)
             self::$_vSpaces = array(
-                \Hoa\String\Unicode\Util::fromCode(0x000a), // linefeed
-                \Hoa\String\Unicode\Util::fromCode(0x000b), // vertical tab
-                \Hoa\String\Unicode\Util::fromCode(0x000c), // formfeed
-                \Hoa\String\Unicode\Util::fromCode(0x000d), // carriage return
-                \Hoa\String\Unicode\Util::fromCode(0x0085), // next line
-                \Hoa\String\Unicode\Util::fromCode(0x2028), // line separator
-                \Hoa\String\Unicode\Util::fromCode(0x2029)  // paragraph separator
+                \Hoa\String::fromCode(0x000a), // linefeed
+                \Hoa\String::fromCode(0x000b), // vertical tab
+                \Hoa\String::fromCode(0x000c), // formfeed
+                \Hoa\String::fromCode(0x000d), // carriage return
+                \Hoa\String::fromCode(0x0085), // next line
+                \Hoa\String::fromCode(0x2028), // line separator
+                \Hoa\String::fromCode(0x2029)  // paragraph separator
             );
 
         return;
@@ -289,7 +289,7 @@ class Uniform implements Visit {
 
                             case 'x':
                                 $value = trim($value, 'x{}');
-                                return \Hoa\String\Unicode\Util::fromCode($value);
+                                return \Hoa\String::fromCode($value);
                               break;
 
                             default:
@@ -336,7 +336,7 @@ class Uniform implements Visit {
                                     array(0x5f)
                                 );
 
-                                return \Hoa\String\Unicode\Util::fromCode(dechex($_[
+                                return \Hoa\String::fromCode(dechex($_[
                                     $this->_sampler->getInteger(
                                         0,
                                         count($_) - 1
