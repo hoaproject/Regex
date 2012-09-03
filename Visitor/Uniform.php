@@ -72,7 +72,7 @@ class Uniform implements Visit {
     /**
      * Numeric-sampler.
      *
-     * @var \Hoa\Test\Sampler object
+     * @var \Hoa\Math\Sampler object
      */
     protected $_sampler        = null;
 
@@ -103,11 +103,11 @@ class Uniform implements Visit {
      * Initialize numeric-sampler and the size.
      *
      * @access  public
-     * @param   \Hoa\Test\Sampler  $sampler    Numeric-sampler.
+     * @param   \Hoa\Math\Sampler  $sampler    Numeric-sampler.
      * @param   int                $n          Size.
      * @return  void
      */
-    public function __construct ( \Hoa\Test\Sampler $sampler, $n = 0 ) {
+    public function __construct ( \Hoa\Math\Sampler $sampler, $n = 0 ) {
 
         $this->_sampler = $sampler;
         $this->setSize($n);

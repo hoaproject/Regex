@@ -72,7 +72,7 @@ class Isotropic implements Visit {
     /**
      * Numeric-sampler.
      *
-     * @var \Hoa\Test\Sampler object
+     * @var \Hoa\Math\Sampler object
      */
     protected $_sampler = null;
 
@@ -82,10 +82,10 @@ class Isotropic implements Visit {
      * Initialize numeric-sampler.
      *
      * @access  public
-     * @param   \Hoa\Test\Sampler  $sampler    Numeric-sampler.
+     * @param   \Hoa\Math\Sampler  $sampler    Numeric-sampler.
      * @return  void
      */
-    public function __construct ( \Hoa\Test\Sampler $sampler ) {
+    public function __construct ( \Hoa\Math\Sampler $sampler ) {
 
         $this->_sampler = $sampler;
 
