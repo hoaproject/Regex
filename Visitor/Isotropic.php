@@ -182,7 +182,9 @@ class Isotropic implements Visit {
                 $c = array();
 
                 foreach($element->getChildren() as $child)
-                    $c[ord($child->accept($this, $handle, $eldnah))] = true;
+                    $c[\Hoa\String::toCode(
+                        $child->accept($this, $handle, $eldnah)
+                    )] = true;
 
                 do {
 
@@ -190,15 +192,17 @@ class Isotropic implements Visit {
                     $i = $this->_sampler->getInteger(32, 126);
                 } while(isset($c[$i]));
 
-                return chr($i);
+                return \Hoa\String::fromCode($i);
               break;
 
             case '#range':
-                $out = null;
+                $out   = null;
+                $left  = $element->getChild(0)->accept($this, $handle, $eldnah);
+                $right = $element->getChild(1)->accept($this, $handle, $eldnah);
 
-                return chr($this->_sampler->getInteger(
-                    ord($element->getChild(0)->accept($this, $handle, $eldnah)),
-                    ord($element->getChild(1)->accept($this, $handle, $eldnah))
+                return \Hoa\String::fromCode($this->_sampler->getInteger(
+                    \Hoa\String::toCode($left),
+                    \Hoa\String::toCode($right)
                 ));
               break;
 
@@ -209,6 +213,7 @@ class Isotropic implements Visit {
 
                     case 'character':
                         $value = ltrim($value, '\\');
+
                         switch($value) {
 
                             case 'a':
@@ -230,7 +235,9 @@ class Isotropic implements Visit {
                                 return "\t";
 
                             default:
-                                return chr($value[2]);
+                                return \Hoa\String::fromCode(intval(
+                                    substr($value, 1)
+                                ));
                         }
                       break;
 
@@ -247,7 +254,7 @@ class Isotropic implements Visit {
                               break;
 
                             default:
-                                return chr(octdec($value));
+                                return \Hoa\String::fromCode(octdec($value));
                         }
                       break;
 
