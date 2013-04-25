@@ -24,6 +24,7 @@
     "require": {
         "hoa/core"    : "master",
         "hoa/math"    : "master",
-        "hoa/string"  : "master"
+        "hoa/string"  : "master",
+        "hoa/visitor" : "master"
     }
 }
