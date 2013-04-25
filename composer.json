@@ -22,9 +22,9 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/core"    : "master",
-        "hoa/math"    : "master",
-        "hoa/string"  : "master",
-        "hoa/visitor" : "master"
+        "hoa/core"    : "dev-master",
+        "hoa/math"    : "dev-master",
+        "hoa/string"  : "dev-master",
+        "hoa/visitor" : "dev-master"
     }
 }
