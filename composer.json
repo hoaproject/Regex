@@ -26,5 +26,6 @@
         "hoa/math"    : "dev-master",
         "hoa/string"  : "dev-master",
         "hoa/visitor" : "dev-master"
-    }
+    },
+    "minimum-stability": "dev"
 }
