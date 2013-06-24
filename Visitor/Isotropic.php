@@ -39,14 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Regex\Visitor\Exception
+ * \Hoa\Visitor\Visit
  */
--> import('Regex.Visitor.Exception')
-
-/**
- * \Hoa\Regex\Visitor\Visit
- */
--> import('Regex.Visitor.Visit')
+-> import('Visitor.Visit')
 
 /**
  * \Hoa\String
@@ -67,7 +62,7 @@ namespace Hoa\Regex\Visitor {
  * @license    New BSD License
  */
 
-class Isotropic implements Visit {
+class Isotropic implements \Hoa\Visitor\Visit {
 
     /**
      * Numeric-sampler.
