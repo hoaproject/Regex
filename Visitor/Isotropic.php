@@ -137,12 +137,12 @@ class Isotropic implements \Hoa\Visitor\Visit {
                       break;
 
                     case 'zero_or_more':
-                        $y = 5; // why not?
+                        $y = mt_rand(5, 8); // why not?
                       break;
 
                     case 'one_or_more':
                         $x = 1;
-                        $y = 5; // why not?
+                        $y = mt_rand(5, 8); // why not?
                       break;
 
                     case 'exactly_n':
@@ -158,7 +158,7 @@ class Isotropic implements \Hoa\Visitor\Visit {
                     case 'n_or_more':
                         $xy = explode(',', substr($xy, 1, -1));
                         $x  = (int) trim($xy[0]);
-                        $y  = 5; // why not?
+                        $y  = mt_rand($x + 5, $x + 8); // why not?
                       break;
                 }
 
