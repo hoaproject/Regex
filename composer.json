@@ -27,10 +27,6 @@
         "hoa/visitor" : "dev-master"
     },
     "minimum-stability": "dev",
-    "target-dir": "Hoa/Regex",
-    "autoload": {
-        "psr-0": {
-            "Hoa\\Regex": "."
-        }
-    }
+    "target-dir"       : "Hoa/Regex",
+    "autoload"         : { "psr-0": { "Hoa\\Regex": "." } }
 }
