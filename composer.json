@@ -21,9 +21,9 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/core"    : "~1.0",
+        "hoa/core"    : "~2.0",
         "hoa/math"    : "~0.0",
-        "hoa/string"  : "~1.0",
+        "hoa/string"  : "~2.0",
         "hoa/visitor" : "~0.0"
     },
     "target-dir": "Hoa/Regex",
