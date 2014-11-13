@@ -34,23 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Regex\Visitor;
 
-from('Hoa')
-
-/**
- * \Hoa\Visitor\Visit
- */
--> import('Visitor.Visit')
-
-/**
- * \Hoa\String
- */
--> import('String.~');
-
-}
-
-namespace Hoa\Regex\Visitor {
+use Hoa\Math;
+use Hoa\String;
+use Hoa\Visitor;
 
 /**
  * Class \Hoa\Regex\Visitor\Isotropic.
@@ -62,7 +50,7 @@ namespace Hoa\Regex\Visitor {
  * @license    New BSD License
  */
 
-class Isotropic implements \Hoa\Visitor\Visit {
+class Isotropic implements Visitor\Visit {
 
     /**
      * Numeric-sampler.
@@ -80,7 +68,7 @@ class Isotropic implements \Hoa\Visitor\Visit {
      * @param   \Hoa\Math\Sampler  $sampler    Numeric-sampler.
      * @return  void
      */
-    public function __construct ( \Hoa\Math\Sampler $sampler ) {
+    public function __construct ( Math\Sampler $sampler ) {
 
         $this->_sampler = $sampler;
 
@@ -96,7 +84,7 @@ class Isotropic implements \Hoa\Visitor\Visit {
      * @param   mixed                 $eldnah     Handle (not reference).
      * @return  mixed
      */
-    public function visit ( \Hoa\Visitor\Element $element,
+    public function visit ( Visitor\Element $element,
                             &$handle = null, $eldnah = null ) {
 
         switch($element->getId()) {
@@ -174,10 +162,10 @@ class Isotropic implements \Hoa\Visitor\Visit {
               break;
 
             case '#negativeclass':
-                $c = array();
+                $c = [];
 
                 foreach($element->getChildren() as $child)
-                    $c[\Hoa\String::toCode(
+                    $c[String::toCode(
                         $child->accept($this, $handle, $eldnah)
                     )] = true;
 
@@ -187,7 +175,7 @@ class Isotropic implements \Hoa\Visitor\Visit {
                     $i = $this->_sampler->getInteger(32, 126);
                 } while(isset($c[$i]));
 
-                return \Hoa\String::fromCode($i);
+                return String::fromCode($i);
               break;
 
             case '#range':
@@ -195,9 +183,9 @@ class Isotropic implements \Hoa\Visitor\Visit {
                 $left  = $element->getChild(0)->accept($this, $handle, $eldnah);
                 $right = $element->getChild(1)->accept($this, $handle, $eldnah);
 
-                return \Hoa\String::fromCode($this->_sampler->getInteger(
-                    \Hoa\String::toCode($left),
-                    \Hoa\String::toCode($right)
+                return String::fromCode($this->_sampler->getInteger(
+                    String::toCode($left),
+                    String::toCode($right)
                 ));
               break;
 
@@ -230,7 +218,7 @@ class Isotropic implements \Hoa\Visitor\Visit {
                                 return "\t";
 
                             default:
-                                return \Hoa\String::fromCode(intval(
+                                return String::fromCode(intval(
                                     substr($value, 1)
                                 ));
                         }
@@ -243,13 +231,13 @@ class Isotropic implements \Hoa\Visitor\Visit {
 
                             case 'x':
                                 $value = trim($value, 'x{}');
-                                return \Hoa\String::fromCode(
+                                return String::fromCode(
                                     hexdec($value)
                                 );
                               break;
 
                             default:
-                                return \Hoa\String::fromCode(octdec($value));
+                                return String::fromCode(octdec($value));
                         }
                       break;
 
@@ -270,11 +258,11 @@ class Isotropic implements \Hoa\Visitor\Visit {
                                              : 'v';
 
                             case 'h':
-                                $h = array(
+                                $h = [
                                     chr(0x0009),
                                     chr(0x0020),
                                     chr(0x00a0)
-                                );
+                                ];
 
                                 return $h[$this->_sampler->getInteger(
                                     0,
@@ -282,12 +270,12 @@ class Isotropic implements \Hoa\Visitor\Visit {
                                 )];
 
                             case 'v':
-                                $v = array(
+                                $v = [
                                     chr(0x000a),
                                     chr(0x000b),
                                     chr(0x000c),
                                     chr(0x000d)
-                                );
+                                ];
 
                                 return $v[$this->_sampler->getInteger(
                                     0,
@@ -298,7 +286,7 @@ class Isotropic implements \Hoa\Visitor\Visit {
                                 $w  = array_merge(
                                     range(0x41, 0x5a),
                                     range(0x61, 0x7a),
-                                    array(0x5f)
+                                    [0x5f]
                                 );
 
                                 return chr($w[
@@ -319,7 +307,7 @@ class Isotropic implements \Hoa\Visitor\Visit {
                             $w  = array_merge(
                                 range(0x41, 0x5a),
                                 range(0x61, 0x7a),
-                                array(0x5f)
+                                [0x5f]
                             );
 
                             return chr($w[
@@ -342,6 +330,4 @@ class Isotropic implements \Hoa\Visitor\Visit {
 
         return;
     }
-}
-
 }
