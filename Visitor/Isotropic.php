@@ -37,6 +37,7 @@
 namespace Hoa\Regex\Visitor;
 
 use Hoa\Math;
+use Hoa\Regex;
 use Hoa\String;
 use Hoa\Visitor;
 
@@ -326,6 +327,10 @@ class Isotropic implements Visitor\Visit {
                 }
 
               break;
+
+            default:
+                throw new Regex\Exception(
+                    'Unsupported node: %s.', 0, $element->getId());
         }
 
         return;
