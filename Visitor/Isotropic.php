@@ -92,6 +92,7 @@ class Isotropic implements Visitor\Visit {
 
             case '#expression':
             case '#capturing':
+            case '#noncapturing':
             case '#namedcapturing':
                 return $element->getChild(0)->accept($this, $handle, $eldnah);
               break;
