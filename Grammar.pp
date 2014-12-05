@@ -44,7 +44,7 @@
 
 
 // Skip.
-%skip   nl                       \n
+%skip   nl                       \n|\(\?\-?[imsx]\)
 
 // Character classes.
 %token  negative_class_          \[\^
