@@ -44,13 +44,16 @@
 
 
 // Skip.
-%skip   nl                       \n|\(\?\-?[imsx]\)
+%skip   nl                       \n
 
 // Character classes.
 %token  negative_class_          \[\^
 %token  class_                   \[
 %token _class                    \]
 %token  range                    \-
+
+// Internal options.
+%token  internal_option          \(\?[\-+]?[imsx]\)
 
 // Lookahead and lookbehind assertions.
 %token  lookahead_               \(\?=
@@ -121,8 +124,11 @@ alternation:
     concatenation() ( ::alternation:: concatenation() #alternation )*
 
 concatenation:
-    (   assertion() | quantification() | condition() )
-    ( ( assertion() | quantification() | condition() ) #concatenation )*
+    (   internal_options() | assertion() | quantification() | condition() )
+    ( ( internal_options() | assertion() | quantification() | condition() ) #concatenation )*
+
+#internal_options:
+    <internal_option>
 
 #condition:
     (

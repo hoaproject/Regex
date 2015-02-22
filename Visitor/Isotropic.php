@@ -329,6 +329,9 @@ class Isotropic implements Visitor\Visit {
 
               break;
 
+            case '#internal_options':
+              break;
+
             default:
                 throw new Regex\Exception(
                     'Unsupported node: %s.', 0, $element->getId());
