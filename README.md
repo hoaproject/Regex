@@ -40,16 +40,16 @@ and produce an AST of the following regular expression: `ab(c|d){2,4}e?`. Thus:
 
 ```php
 // 1. Read the grammar.
-$grammar     = new Hoa\File\Read('hoa://Library/Regex/Grammar.pp');
+$grammar  = new Hoa\File\Read('hoa://Library/Regex/Grammar.pp');
 
 // 2. Load the compiler.
-$compiler    = Hoa\Compiler\Llk\Llk::load($grammar);
+$compiler = Hoa\Compiler\Llk\Llk::load($grammar);
 
 // 3. Lex, parse and produce the AST.
-$ast         = $compiler->parse('ab(c|d){2,4}e?');
+$ast      = $compiler->parse('ab(c|d){2,4}e?');
 
 // 4. Dump the result.
-$dump        = new Hoa\Compiler\Visitor\Dump();
+$dump     = new Hoa\Compiler\Visitor\Dump();
 echo $dump->visit($ast);
 
 /**
