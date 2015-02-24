@@ -1,3 +1,10 @@
+# 0.15.02.24
+
+  * Add the `CHANGELOG.md` file. (Ivan Enderlin, 2015-02-24T09:46:53+01:00)
+  * Format code in an example. (Ivan Enderlin, 2015-02-22T14:22:09+01:00)
+  * Better internal options support (no skip). (Ivan Enderlin, 2015-02-22T14:18:57+01:00)
+  * Happy new year! (Ivan Enderlin, 2015-01-05T15:05:31+01:00)
+
 # 0.14.12.10
 
   * Move to PSR-4. (Ivan Enderlin, 2014-12-10T08:52:28+01:00)
