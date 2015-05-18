@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -46,17 +46,15 @@ use Hoa\Visitor;
  *
  * Isotropic walk on the AST to generate a data.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Isotropic implements Visitor\Visit {
-
+class Isotropic implements Visitor\Visit
+{
     /**
      * Numeric-sampler.
      *
-     * @var \Hoa\Math\Sampler object
+     * @var \Hoa\Math\Sampler
      */
     protected $_sampler = null;
 
@@ -65,12 +63,11 @@ class Isotropic implements Visitor\Visit {
     /**
      * Initialize numeric-sampler.
      *
-     * @access  public
      * @param   \Hoa\Math\Sampler  $sampler    Numeric-sampler.
      * @return  void
      */
-    public function __construct ( Math\Sampler $sampler ) {
-
+    public function __construct(Math\Sampler $sampler)
+    {
         $this->_sampler = $sampler;
 
         return;
@@ -79,23 +76,22 @@ class Isotropic implements Visitor\Visit {
     /**
      * Visit an element.
      *
-     * @access  public
      * @param   \Hoa\Visitor\Element  $element    Element to visit.
      * @param   mixed                 &$handle    Handle (reference).
      * @param   mixed                 $eldnah     Handle (not reference).
      * @return  mixed
      */
-    public function visit ( Visitor\Element $element,
-                            &$handle = null, $eldnah = null ) {
-
-        switch($element->getId()) {
-
+    public function visit(
+        Visitor\Element $element,
+        &$handle = null,
+        $eldnah = null
+    ) {
+        switch ($element->getId()) {
             case '#expression':
             case '#capturing':
             case '#noncapturing':
             case '#namedcapturing':
                 return $element->getChild(0)->accept($this, $handle, $eldnah);
-              break;
 
             case '#alternation':
             case '#class':
@@ -103,16 +99,15 @@ class Isotropic implements Visitor\Visit {
                     0,
                     $element->getChildrenNumber() - 1
                 ))->accept($this, $handle, $eldnah);
-              break;
 
             case '#concatenation':
                 $out = null;
 
-                foreach($element->getChildren() as $child)
+                foreach ($element->getChildren() as $child) {
                     $out .= $child->accept($this, $handle, $eldnah);
+                }
 
                 return $out;
-              break;
 
             case '#quantification':
                 $out = null;
@@ -120,87 +115,94 @@ class Isotropic implements Visitor\Visit {
                 $x   = 0;
                 $y   = 0;
 
-                switch($element->getChild(1)->getValueToken()) {
-
+                switch ($element->getChild(1)->getValueToken()) {
                     case 'zero_or_one':
                         $y = 1;
-                      break;
+
+                        break;
 
                     case 'zero_or_more':
                         $y = mt_rand(5, 8); // why not?
-                      break;
+
+                        break;
 
                     case 'one_or_more':
                         $x = 1;
                         $y = mt_rand(5, 8); // why not?
-                      break;
+
+                        break;
 
                     case 'exactly_n':
                         $x = $y = (int) substr($xy, 1, -1);
-                      break;
+
+                        break;
 
                     case 'n_to_m':
                         $xy = explode(',', substr($xy, 1, -1));
                         $x  = (int) trim($xy[0]);
                         $y  = (int) trim($xy[1]);
-                      break;
+
+                        break;
 
                     case 'n_or_more':
                         $xy = explode(',', substr($xy, 1, -1));
                         $x  = (int) trim($xy[0]);
                         $y  = mt_rand($x + 5, $x + 8); // why not?
-                      break;
+
+                        break;
                 }
 
-                for($i = 0, $max = $this->_sampler->getInteger($x, $y);
-                    $i < $max; ++$i)
+                for (
+                    $i = 0, $max = $this->_sampler->getInteger($x, $y);
+                    $i < $max;
+                    ++$i
+                ) {
                     $out .= $element->getChild(0)->accept(
                         $this,
                         $handle,
                         $eldnah
                     );
+                }
 
                 return $out;
-              break;
 
             case '#negativeclass':
                 $c = [];
 
-                foreach($element->getChildren() as $child)
+                foreach ($element->getChildren() as $child) {
                     $c[String::toCode(
                         $child->accept($this, $handle, $eldnah)
                     )] = true;
+                }
 
                 do {
-
                     // all printable ASCII.
                     $i = $this->_sampler->getInteger(32, 126);
-                } while(isset($c[$i]));
+                } while (isset($c[$i]));
 
                 return String::fromCode($i);
-              break;
 
             case '#range':
                 $out   = null;
                 $left  = $element->getChild(0)->accept($this, $handle, $eldnah);
                 $right = $element->getChild(1)->accept($this, $handle, $eldnah);
 
-                return String::fromCode($this->_sampler->getInteger(
-                    String::toCode($left),
-                    String::toCode($right)
-                ));
-              break;
+                return
+                    String::fromCode(
+                        $this->_sampler->getInteger(
+                            String::toCode($left),
+                            String::toCode($right)
+                        )
+                    );
 
             case 'token':
                 $value = $element->getValueValue();
 
-                switch($element->getValueToken()) {
-
+                switch ($element->getValueToken()) {
                     case 'character':
                         $value = ltrim($value, '\\');
 
-                        switch($value) {
-
+                        switch ($value) {
                             case 'a':
                                 return "\a";
 
@@ -220,34 +222,37 @@ class Isotropic implements Visitor\Visit {
                                 return "\t";
 
                             default:
-                                return String::fromCode(intval(
-                                    substr($value, 1)
-                                ));
+                                return
+                                    String::fromCode(
+                                        intval(
+                                            substr($value, 1)
+                                        )
+                                    );
                         }
-                      break;
+
+                        break;
 
                     case 'dynamic_character':
                         $value = ltrim($value, '\\');
 
-                        switch($value[0]) {
-
+                        switch ($value[0]) {
                             case 'x':
                                 $value = trim($value, 'x{}');
+
                                 return String::fromCode(
                                     hexdec($value)
                                 );
-                              break;
 
                             default:
                                 return String::fromCode(octdec($value));
                         }
-                      break;
+
+                        break;
 
                     case 'character_type':
                         $value = ltrim($value, '\\');
 
-                        switch($value) {
-
+                        switch ($value) {
                             case 'C':
                                 return $this->_sampler->getInteger(0, 127);
 
@@ -255,9 +260,7 @@ class Isotropic implements Visitor\Visit {
                                 return $this->_sampler->getInteger(0, 9);
 
                             case 's':
-                                $value = $this->_sampler->getInteger(0, 1)
-                                             ? 'h'
-                                             : 'v';
+                                $value = $this->_sampler->getInteger(0, 1) ? 'h' : 'v';
 
                             case 'h':
                                 $h = [
@@ -266,10 +269,7 @@ class Isotropic implements Visitor\Visit {
                                     chr(0x00a0)
                                 ];
 
-                                return $h[$this->_sampler->getInteger(
-                                    0,
-                                    count($h) -1
-                                )];
+                                return $h[$this->_sampler->getInteger(0, count($h) -1)];
 
                             case 'v':
                                 $v = [
@@ -279,10 +279,7 @@ class Isotropic implements Visitor\Visit {
                                     chr(0x000d)
                                 ];
 
-                                return $v[$this->_sampler->getInteger(
-                                    0,
-                                    count($v) -1
-                                )];
+                                return $v[$this->_sampler->getInteger(0, count($v) -1)];
 
                             case 'w':
                                 $w  = array_merge(
@@ -291,50 +288,48 @@ class Isotropic implements Visitor\Visit {
                                     [0x5f]
                                 );
 
-                                return chr($w[
-                                    $this->_sampler->getInteger(
-                                        0,
-                                        count($w) - 1
-                                    )
-                                ]);
+                                return chr($w[$this->_sampler->getInteger(0, count($w) - 1)]);
 
                             default:
                                 return '?';
                         }
-                      break;
+
+                        break;
 
                     case 'literal':
-                        if('.' === $value) {
-
+                        if ('.' === $value) {
                             $w  = array_merge(
                                 range(0x41, 0x5a),
                                 range(0x61, 0x7a),
                                 [0x5f]
                             );
 
-                            return chr($w[
-                                $this->_sampler->getInteger(
-                                    0,
-                                    count($w) - 1
-                                )
-                            ]);
+                            return chr($w[$this->_sampler->getInteger(0, count($w) - 1)]);
                         }
 
-                        return str_replace('\\\\', '\\', preg_replace(
-                            '#\\\(?!\\\)#',
-                            '',
-                            $value
-                        ));
+                        return
+                            str_replace(
+                                '\\\\',
+                                '\\',
+                                preg_replace(
+                                    '#\\\(?!\\\)#',
+                                    '',
+                                    $value
+                                )
+                            );
                 }
 
-              break;
+                break;
 
             case '#internal_options':
-              break;
+                break;
 
             default:
                 throw new Regex\Exception(
-                    'Unsupported node: %s.', 0, $element->getId());
+                    'Unsupported node: %s.',
+                    0,
+                    $element->getId()
+                );
         }
 
         return;
