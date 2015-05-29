@@ -38,7 +38,7 @@ namespace Hoa\Regex\Visitor;
 
 use Hoa\Math;
 use Hoa\Regex;
-use Hoa\String;
+use Hoa\Ustring;
 use Hoa\Visitor;
 
 /**
@@ -170,7 +170,7 @@ class Isotropic implements Visitor\Visit
                 $c = [];
 
                 foreach ($element->getChildren() as $child) {
-                    $c[String::toCode(
+                    $c[Ustring::toCode(
                         $child->accept($this, $handle, $eldnah)
                     )] = true;
                 }
@@ -180,7 +180,7 @@ class Isotropic implements Visitor\Visit
                     $i = $this->_sampler->getInteger(32, 126);
                 } while (isset($c[$i]));
 
-                return String::fromCode($i);
+                return Ustring::fromCode($i);
 
             case '#range':
                 $out   = null;
@@ -188,10 +188,10 @@ class Isotropic implements Visitor\Visit
                 $right = $element->getChild(1)->accept($this, $handle, $eldnah);
 
                 return
-                    String::fromCode(
+                    Ustring::fromCode(
                         $this->_sampler->getInteger(
-                            String::toCode($left),
-                            String::toCode($right)
+                            Ustring::toCode($left),
+                            Ustring::toCode($right)
                         )
                     );
 
@@ -223,7 +223,7 @@ class Isotropic implements Visitor\Visit
 
                             default:
                                 return
-                                    String::fromCode(
+                                    Ustring::fromCode(
                                         intval(
                                             substr($value, 1)
                                         )
@@ -239,12 +239,12 @@ class Isotropic implements Visitor\Visit
                             case 'x':
                                 $value = trim($value, 'x{}');
 
-                                return String::fromCode(
+                                return Ustring::fromCode(
                                     hexdec($value)
                                 );
 
                             default:
-                                return String::fromCode(octdec($value));
+                                return Ustring::fromCode(octdec($value));
                         }
 
                         break;
