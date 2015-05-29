@@ -1,3 +1,8 @@
+# 0.15.05.29
+
+  * Move to `Hoa\Ustring`. (Ivan Enderlin, 2015-05-29T14:51:52+02:00)
+  * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-18T09:28:32+02:00)
+
 # 0.15.02.24
 
   * Add the `CHANGELOG.md` file. (Ivan Enderlin, 2015-02-24T09:46:53+01:00)
