@@ -266,7 +266,7 @@ class Isotropic implements Visitor\Visit
                                 $h = [
                                     chr(0x0009),
                                     chr(0x0020),
-                                    chr(0x00a0)
+                                    Ustring::fromCode(0x00a0)
                                 ];
 
                                 return $h[$this->_sampler->getInteger(0, count($h) -1)];
