@@ -80,6 +80,7 @@ class Isotropic implements Visitor\Visit
      * @param   mixed                 &$handle    Handle (reference).
      * @param   mixed                 $eldnah     Handle (not reference).
      * @return  mixed
+     * @throws  \Hoa\Regex\Exception
      */
     public function visit(
         Visitor\Element $element,
@@ -252,15 +253,16 @@ class Isotropic implements Visitor\Visit
                     case 'character_type':
                         $value = ltrim($value, '\\');
 
+                        if ('s' === $value) {
+                            $value = $this->_sampler->getInteger(0, 1) ? 'h' : 'v';
+                        }
+
                         switch ($value) {
                             case 'C':
                                 return $this->_sampler->getInteger(0, 127);
 
                             case 'd':
                                 return $this->_sampler->getInteger(0, 9);
-
-                            case 's':
-                                $value = $this->_sampler->getInteger(0, 1) ? 'h' : 'v';
 
                             case 'h':
                                 $h = [
