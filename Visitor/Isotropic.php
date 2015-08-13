@@ -266,19 +266,19 @@ class Isotropic implements Visitor\Visit
 
                             case 'h':
                                 $h = [
-                                    chr(0x0009),
-                                    chr(0x0020),
-                                    chr(0x00a0)
+                                    Ustring::fromCode(0x0009),
+                                    Ustring::fromCode(0x0020),
+                                    Ustring::fromCode(0x00a0)
                                 ];
 
                                 return $h[$this->_sampler->getInteger(0, count($h) -1)];
 
                             case 'v':
                                 $v = [
-                                    chr(0x000a),
-                                    chr(0x000b),
-                                    chr(0x000c),
-                                    chr(0x000d)
+                                    Ustring::fromCode(0x000a),
+                                    Ustring::fromCode(0x000b),
+                                    Ustring::fromCode(0x000c),
+                                    Ustring::fromCode(0x000d)
                                 ];
 
                                 return $v[$this->_sampler->getInteger(0, count($v) -1)];
@@ -290,7 +290,7 @@ class Isotropic implements Visitor\Visit
                                     [0x5f]
                                 );
 
-                                return chr($w[$this->_sampler->getInteger(0, count($w) - 1)]);
+                                return Ustring::fromCode($w[$this->_sampler->getInteger(0, count($w) - 1)]);
 
                             default:
                                 return '?';
@@ -306,7 +306,7 @@ class Isotropic implements Visitor\Visit
                                 [0x5f]
                             );
 
-                            return chr($w[$this->_sampler->getInteger(0, count($w) - 1)]);
+                            return Ustring::fromCode($w[$this->_sampler->getInteger(0, count($w) - 1)]);
                         }
 
                         return
