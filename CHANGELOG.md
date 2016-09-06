@@ -1,3 +1,7 @@
+# 1.16.09.06
+
+  * Grammar: Update copyright. (Ivan Enderlin, 2016-01-17T14:21:02+01:00)
+
 # 1.16.01.15
 
   * Composer: New stable library. (Ivan Enderlin, 2016-01-14T22:08:58+01:00)
