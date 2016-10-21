@@ -1,30 +1,63 @@
-![Hoa](http://static.hoa-project.net/Image/Hoa_small.png)
+<p align="center">
+  <img src="https://static.hoa-project.net/Image/Hoa.svg" alt="Hoa" width="250px" />
+</p>
 
-Hoa is a **modular**, **extensible** and **structured** set of PHP libraries.
-Moreover, Hoa aims at being a bridge between industrial and research worlds.
+---
 
-# Hoa\Regex ![state](http://central.hoa-project.net/State/Regex)
+<p align="center">
+  <a href="https://travis-ci.org/hoaproject/regex"><img src="https://img.shields.io/travis/hoaproject/regex/master.svg" alt="Build status" /></a>
+  <a href="https://coveralls.io/github/hoaproject/regex?branch=master"><img src="https://img.shields.io/coveralls/hoaproject/regex/master.svg" alt="Code coverage" /></a>
+  <a href="https://packagist.org/packages/hoa/regex"><img src="https://img.shields.io/packagist/dt/hoa/regex.svg" alt="Packagist" /></a>
+  <a href="https://hoa-project.net/LICENSE"><img src="https://img.shields.io/packagist/l/hoa/regex.svg" alt="License" /></a>
+</p>
+<p align="center">
+  Hoa is a <strong>modular</strong>, <strong>extensible</strong> and
+  <strong>structured</strong> set of PHP libraries.<br />
+  Moreover, Hoa aims at being a bridge between industrial and research worlds.
+</p>
+
+# Hoa\Regex
+
+[![Help on IRC](https://img.shields.io/badge/help-%23hoaproject-ff0066.svg)](https://webchat.freenode.net/?channels=#hoaproject)
+[![Help on Gitter](https://img.shields.io/badge/help-gitter-ff0066.svg)](https://gitter.im/hoaproject/central)
+[![Documentation](https://img.shields.io/badge/documentation-hack_book-ff0066.svg)](https://central.hoa-project.net/Documentation/Library/Regex)
+[![Board](https://img.shields.io/badge/organisation-board-ff0066.svg)](https://waffle.io/hoaproject/regex)
 
 This library provides tools to analyze regular expressions and generate strings
 based on regular expressions ([Perl Compatible Regular
 Expressions](http://pcre.org)).
 
+[Learn more](https://central.hoa-project.net/Documentation/Library/Regex).
+
 ## Installation
 
-With [Composer](http://getcomposer.org/), to include this library into your
-dependencies, you need to require
-[`hoa/regex`](https://packagist.org/packages/hoa/regex):
+With [Composer](https://getcomposer.org/), to include this library into
+your dependencies, you need to
+require [`hoa/regex`](https://packagist.org/packages/hoa/regex):
 
-```json
-{
-    "require": {
-        "hoa/regex": "~1.0"
-    }
-}
+```sh
+$ composer require hoa/regex '~1.0'
 ```
 
-Please, read the website to [get more informations about how to
-install](http://hoa-project.net/Source.html).
+For more installation procedures, please read [the Source
+page](https://hoa-project.net/Source.html).
+
+## Testing
+
+Before running the test suites, the development dependencies must be installed:
+
+```sh
+$ composer install
+```
+
+Then, to run all the test suites:
+
+```sh
+$ vendor/bin/hoa test:run
+```
+
+For more information, please read the [contributor
+guide](https://hoa-project.net/Literature/Contributor/Guide.html).
 
 ## Quick usage
 
@@ -35,7 +68,7 @@ on a regular expression by visiting its AST with an isotropic random approach.
 ### Analyze regular expressions
 
 We need the [`Hoa\Compiler`
-library](http://central.hoa-project.net/Resource/Library/Compiler) to lex, parse
+library](https://central.hoa-project.net/Resource/Library/Compiler) to lex, parse
 and produce an AST of the following regular expression: `ab(c|d){2,4}e?`. Thus:
 
 ```php
@@ -76,7 +109,7 @@ two tokens: `c` and `d`, between 2 to 4 times. The second quantification is the
 `e` token that can appear zero or one time.
 
 We can visit the tree with the help of the [`Hoa\Visitor`
-library](http://central.hoa-project.net/Resource/Library/Visitor).
+library](https://central.hoa-project.net/Resource/Library/Visitor).
 
 ### Generate strings based on regular expressions
 
@@ -97,10 +130,35 @@ Strings are generated at random and match the given regular expression.
 
 ## Documentation
 
-Different documentations can be found on the website:
-[http://hoa-project.net/](http://hoa-project.net/).
+The
+[hack book of `Hoa\Regex`](https://central.hoa-project.net/Documentation/Library/Regex)
+contains detailed information about how to use this library and how it works.
+
+To generate the documentation locally, execute the following commands:
+
+```sh
+$ composer require --dev hoa/devtools
+$ vendor/bin/hoa devtools:documentation --open
+```
+
+More documentation can be found on the project's website:
+[hoa-project.net](https://hoa-project.net/).
+
+## Getting help
+
+There are mainly two ways to get help:
+
+  * On the [`#hoaproject`](https://webchat.freenode.net/?channels=#hoaproject)
+    IRC channel,
+  * On the forum at [users.hoa-project.net](https://users.hoa-project.net).
+
+## Contribution
+
+Do you want to contribute? Thanks! A detailed [contributor
+guide](https://hoa-project.net/Literature/Contributor/Guide.html) explains
+everything you need to know.
 
 ## License
 
-Hoa is under the New BSD License (BSD-3-Clause). Please, see
-[`LICENSE`](http://hoa-project.net/LICENSE).
+Hoa is under the New BSD License (BSD-3-Clause). Please, see
+[`LICENSE`](https://hoa-project.net/LICENSE) for details.
