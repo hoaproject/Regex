@@ -1,3 +1,9 @@
+# 1.17.01.13
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-12T14:00:43+01:00)
+  * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-21T17:01:48+02:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-11T16:56:16+02:00)
+
 # 1.16.09.06
 
   * Grammar: Update copyright. (Ivan Enderlin, 2016-01-17T14:21:02+01:00)
