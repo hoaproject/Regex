@@ -37,9 +37,6 @@
 // parser. More informations at http://pcre.org/pcre.txt, sections pcrepattern &
 // pcresyntax.
 //
-// @copyright  Copyright © 2007-2017 Hoa community.
-// @license    New BSD License
-//
 
 
 // Skip.

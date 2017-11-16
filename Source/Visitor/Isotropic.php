@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -45,16 +47,11 @@ use Hoa\Visitor;
  * Class \Hoa\Regex\Visitor\Isotropic.
  *
  * Isotropic walk on the AST to generate a data.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Isotropic implements Visitor\Visit
 {
     /**
-     * Numeric-sampler.
-     *
-     * @var \Hoa\Math\Sampler
+     * Numeric-sampler, from `Hoa\Math\Sampler`.
      */
     protected $_sampler = null;
 
@@ -62,8 +59,6 @@ class Isotropic implements Visitor\Visit
 
     /**
      * Initialize numeric-sampler.
-     *
-     * @param   \Hoa\Math\Sampler  $sampler    Numeric-sampler.
      */
     public function __construct(Math\Sampler $sampler)
     {
@@ -74,17 +69,11 @@ class Isotropic implements Visitor\Visit
 
     /**
      * Visit an element.
-     *
-     * @param   \Hoa\Visitor\Element  $element    Element to visit.
-     * @param   mixed                 &$handle    Handle (reference).
-     * @param   mixed                 $eldnah     Handle (not reference).
-     * @return  mixed
-     * @throws  \Hoa\Regex\Exception
      */
     public function visit(
         Visitor\Element $element,
         &$handle = null,
-        $eldnah = null
+        $eldnah  = null
     ) {
         switch ($element->getId()) {
             case '#expression':
@@ -270,7 +259,7 @@ class Isotropic implements Visitor\Visit
                                     Ustring::fromCode(0x00a0)
                                 ];
 
-                                return $h[$this->_sampler->getInteger(0, count($h) -1)];
+                                return $h[$this->_sampler->getInteger(0, count($h) - 1)];
 
                             case 'v':
                                 $v = [
@@ -280,7 +269,7 @@ class Isotropic implements Visitor\Visit
                                     Ustring::fromCode(0x000d)
                                 ];
 
-                                return $v[$this->_sampler->getInteger(0, count($v) -1)];
+                                return $v[$this->_sampler->getInteger(0, count($v) - 1)];
 
                             case 'w':
                                 $w  = array_merge(
