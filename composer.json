@@ -23,6 +23,7 @@
         "source": "https://central.hoa-project.net/Resource/Library/Regex"
     },
     "require": {
+        "php"            : ">=7.1",
         "hoa/consistency": "~1.0",
         "hoa/exception"  : "~1.0",
         "hoa/math"       : "~1.0",
@@ -32,7 +33,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Hoa\\Regex\\": "."
+            "Hoa\\Regex\\": "Source"
         }
     },
     "extra": {
