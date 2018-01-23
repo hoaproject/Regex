@@ -165,7 +165,7 @@ quantifier:
         ::negative_class_:: #negativeclass
       | ::class_::
     )
-    ( range() | literal() )+
+    ( <class_> | range() | literal() )+ <range>?
     ::_class::
 
 #range:
