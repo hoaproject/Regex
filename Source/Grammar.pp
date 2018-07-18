@@ -106,7 +106,7 @@
 // Please, see PCRESYNTAX(3), General Category properties, PCRE special category
 // properties and script names for \p{} and \P{}.
 %token character_type            \\([CdDhHNRsSvVwWX]|[pP]{[^}]+})
-%token anchor                    \\(bBAZzG)|\^|\$
+%token anchor                    \\([bBAZzG])|\^|\$
 %token match_point_reset         \\K
 %token literal                   \\.|.
 
